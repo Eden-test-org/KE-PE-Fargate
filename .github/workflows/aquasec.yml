@@ -30,18 +30,15 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build, tag, and push image to Amazon ECR
+      - name: pull / push images to Amazon ECR
         id: build-image
         env:
-          ECR_REGISTRY:     ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY:   andreasm
           App_Image:        nginx
-#          IMAGE_TAG: ${{ github.sha }}
-#          IMAGE_TAG: nginx
+          ECR_REPOSITORY:   andreasm
+          ECR_REGISTRY:     ${{ steps.login-ecr.outputs.registry }}
         run: |
           docker pull $App_Image
           docker tag $App_Image $ECR_REGISTRY/$ECR_REPOSITORY:$App_Image
           docker images
-          docker push $App_Image $ECR_REGISTRY/$ECR_REPOSITORY:$App_Image
-          # docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          # echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$App_Image
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$App_Image" >> $GITHUB_OUTPUT
