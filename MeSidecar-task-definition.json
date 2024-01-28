@@ -1,5 +1,4 @@
 {
-    "taskDefinitionArn": "arn:aws:ecs:us-west-1:633291361733:task-definition/AndreasMmeSidecar:26",
     "containerDefinitions": [
         {
             "name": "microenforcer",
@@ -89,43 +88,8 @@
     "taskRoleArn": "arn:aws:iam::633291361733:role/ecsTaskExecutionRole",
     "executionRoleArn": "arn:aws:iam::633291361733:role/ecsTaskExecutionRole",
     "networkMode": "awsvpc",
-    "revision": 26,
     "volumes": [],
-    "status": "ACTIVE",
-    "requiresAttributes": [
-        {
-            "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
-        },
-        {
-            "name": "ecs.capability.execution-role-awslogs"
-        },
-        {
-            "name": "com.amazonaws.ecs.capability.ecr-auth"
-        },
-        {
-            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
-        },
-        {
-            "name": "com.amazonaws.ecs.capability.task-iam-role"
-        },
-        {
-            "name": "ecs.capability.execution-role-ecr-pull"
-        },
-        {
-            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
-        },
-        {
-            "name": "ecs.capability.task-eni"
-        },
-        {
-            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.29"
-        }
-    ],
     "placementConstraints": [],
-    "compatibilities": [
-        "EC2",
-        "FARGATE"
-    ],
     "requiresCompatibilities": [
         "FARGATE"
     ],
@@ -135,7 +99,5 @@
         "cpuArchitecture": "X86_64",
         "operatingSystemFamily": "LINUX"
     },
-    "registeredAt": "2024-01-23T16:37:56.501Z",
-    "registeredBy": "arn:aws:sts::633291361733:assumed-role/AWSReservedSSO_aws-aqua-cross-dep-cs_a0e00c70a27940bd/ziv.lifshits@aquasec.com",
     "tags": []
 }
