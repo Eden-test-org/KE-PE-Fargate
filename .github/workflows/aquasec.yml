@@ -13,7 +13,9 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Configure AWS CLI
-        uses: aws-actions/configure-aws-cli@v2
+#        uses: aws-actions/configure-aws-cli@v2
+        uses: aws-actions/configure-aws-credentials@v4
+
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -26,7 +28,7 @@ jobs:
             --region us-east-1 \
             --sso-start-url https://aqua-sso.awsapps.com/start# \
             --sso-region us-east-1 \
-            --sso-account-id 633291361733_aws-aqua-cross-dep-cs \
+            --sso-account-id 633291361733 \
             --sso-role-name aws-aqua-cross-dep-cs
 
           aws sso login --profile sso-profile
