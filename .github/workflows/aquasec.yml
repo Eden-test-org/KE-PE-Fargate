@@ -12,7 +12,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-
+## funzt ned !!
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
 #        uses: aws-actions/configure-aws-credentials@v1
@@ -21,7 +21,7 @@ jobs:
             aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             aws-region: us-east-1
         
-
+## chatGPT lügt !!!
       # - name: Configure AWS CLI
         # uses: aws-actions/configure-aws-cli@v2
 
