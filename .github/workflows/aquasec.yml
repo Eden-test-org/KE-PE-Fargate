@@ -21,11 +21,12 @@ jobs:
 
       - name: Set up AWS credentials
         run: |
+          mkdir ~/.aws/
           echo "[default]" > ~/.aws/credentials
 
       - name: Get up AWS credentials
         run: |
-          ls -l ~/.aws/credentials
+          ls -lR ~/.aws/credentials
 
       - name: Your AWS CLI Command
         run: aws s3 ls  # Replace with your actual AWS CLI command
