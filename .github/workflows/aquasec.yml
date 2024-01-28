@@ -26,47 +26,47 @@ jobs:
 #        env:
 #          AWS_REGION: us-west-1  # Specify your AWS region here
           
-      # - name: Login to Amazon ECR
-        # id: login-ecr
-        # uses: aws-actions/amazon-ecr-login@v1
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
 
-      # - name: pull / push App Image to Amazon ECR
-        # id: app-image
-        # env:
-          # Image:            nginx
-          # Tag:              latest
-          # ECR_REPOSITORY:   andreasm
-          # ECR_REGISTRY:     ${{ steps.login-ecr.outputs.registry }}
-        # run: |
-          # docker pull $Image:$Tag
-          # docker tag $Image:$Tag $ECR_REGISTRY/$ECR_REPOSITORY:$Image
-          # docker push $ECR_REGISTRY/$ECR_REPOSITORY:$Image
-          # echo "app_image=$ECR_REGISTRY/$ECR_REPOSITORY:$Image" >> $GITHUB_OUTPUT
+      - name: pull / push App Image to Amazon ECR
+        id: app-image
+        env:
+          Image:            nginx
+          Tag:              latest
+          ECR_REPOSITORY:   andreasm
+          ECR_REGISTRY:     ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          docker pull $Image:$Tag
+          docker tag $Image:$Tag $ECR_REGISTRY/$ECR_REPOSITORY:$Image
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$Image
+          echo "app_image=$ECR_REGISTRY/$ECR_REPOSITORY:$Image" >> $GITHUB_OUTPUT
 
-      # - name: Login to registry.aquasec.com
-        # id: login-registry-aquasec-com
-        # uses: docker/login-action@v3
-        # with:
-          # registry: registry.aquasec.com
-          # username: ${{ secrets.AQUA_USER }}
-          # password: ${{ secrets.AQUA_PASSWORD }}
+      - name: Login to registry.aquasec.com
+        id: login-registry-aquasec-com
+        uses: docker/login-action@v3
+        with:
+          registry: registry.aquasec.com
+          username: ${{ secrets.AQUA_USER }}
+          password: ${{ secrets.AQUA_PASSWORD }}
 
-      # - name: pull / push ME Sidecar Image to Amazon ECR
-        # id: me-image
-        # env:
-          # Registry:         registry.aquasec.com
-          # Image:            microenforcer-basic
-          # Tag:              2022.4
-          # ECR_REPOSITORY:   andreasm
-          # ECR_REGISTRY:     ${{ steps.login-ecr.outputs.registry }}
-          # AQUA_REGISTRY:    ${{ steps.login-registry-aquasec-com.outputs.registry }}
-        # run: |
-          # docker pull $Registry/$Image:$Tag
-          # docker tag $Registry/$Image:$Tag $ECR_REGISTRY/$ECR_REPOSITORY:$Image
-          # docker push $ECR_REGISTRY/$ECR_REPOSITORY:$Image
-          # echo "me_image=$ECR_REGISTRY/$ECR_REPOSITORY:$Image" >> $GITHUB_OUTPUT
+      - name: pull / push ME Sidecar Image to Amazon ECR
+        id: me-image
+        env:
+          Registry:         registry.aquasec.com
+          Image:            microenforcer-basic
+          Tag:              2022.4
+          ECR_REPOSITORY:   andreasm
+          ECR_REGISTRY:     ${{ steps.login-ecr.outputs.registry }}
+          AQUA_REGISTRY:    ${{ steps.login-registry-aquasec-com.outputs.registry }}
+        run: |
+          docker pull $Registry/$Image:$Tag
+          docker tag $Registry/$Image:$Tag $ECR_REGISTRY/$ECR_REPOSITORY:$Image
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$Image
+          echo "me_image=$ECR_REGISTRY/$ECR_REPOSITORY:$Image" >> $GITHUB_OUTPUT
           
-      - name: Deploy to Amazon ECS
+      - name: Deploy Task to ECS (on existing cluster / service)
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         env:
           AWS_REGION: us-west-1  # Specify your AWS region here
