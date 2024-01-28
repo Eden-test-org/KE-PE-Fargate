@@ -16,10 +16,10 @@ jobs:
         run: |
           mkdir ~/.aws/
           echo "[default]
-          region=us-west-1
-          aws_access_key_id=${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_session_token=${{ secrets.AWS_SESSION_TOKEN }}" > ~/.aws/credentials
+          region                =   us-west-1
+          aws_access_key_id     =   ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key =   ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_session_token     =   ${{ secrets.AWS_SESSION_TOKEN }}" > ~/.aws/credentials
 
       - name: Your AWS CLI Command
         run: aws s3 ls  # Replace with your actual AWS CLI command
