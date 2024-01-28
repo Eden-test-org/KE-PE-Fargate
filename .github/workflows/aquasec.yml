@@ -46,6 +46,7 @@ jobs:
         id: login-registry-aquasec-com
         uses: docker/login-action@v3
         with:
+          registry: registry.aquasec.com
           username: ${{ secrets.AQUA_USER }}
           password: ${{ secrets.AQUA_PASSWORD }}
 
