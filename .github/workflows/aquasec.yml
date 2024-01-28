@@ -1,11 +1,11 @@
-name: AWS CLI
+name: MicroEnforcer Sidecar on Fargate
 on:
   push:
     branches:
       - main
 
 jobs:
-  configure-sso:
+  deploy-me-sidecar-on-fargate:
     runs-on: ubuntu-latest
 
     steps:
@@ -30,7 +30,7 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: pull / push images to Amazon ECR
+      - name: pull / push App Image to Amazon ECR
         id: build-image
         env:
           App_Image:        nginx
@@ -39,6 +39,26 @@ jobs:
         run: |
           docker pull $App_Image
           docker tag $App_Image $ECR_REGISTRY/$ECR_REPOSITORY:$App_Image
-          docker images
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$App_Image
-          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$App_Image" >> $GITHUB_OUTPUT
+          echo "app_image=$ECR_REGISTRY/$ECR_REPOSITORY:$App_Image" >> $GITHUB_OUTPUT
+
+      - name: Login to registry.aquasec.com
+        id: login-registry-aquasec-com
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.AQUA_USER }}
+          password: ${{ secrets.AQUA_PASSWORD }}
+
+      - name: pull / push ME Sidecar Image to Amazon ECR
+        id: build-image
+        env:
+          ME_Image:         registry.aquasec.com/microenforcer-basic:2022.4
+          ECR_REPOSITORY:   andreasm
+          ECR_REGISTRY:     ${{ steps.login-ecr.outputs.registry }}
+          AQUA_REGISTRY:    ${{ steps.login-registry-aquasec-com.outputs.registry }}
+        run: |
+          docker pull $ME_Image
+          docker tag $ME_Image $ECR_REGISTRY/$ECR_REPOSITORY:$ME_Image
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$ME_Image
+          echo "me_image=$ECR_REGISTRY/$ECR_REPOSITORY:$ME_Image" >> $GITHUB_OUTPUT
+
