@@ -31,7 +31,7 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v1
 
       - name: pull / push App Image to Amazon ECR
-        id: build-image
+        id: app-image
         env:
           App_Image:        nginx
           ECR_REPOSITORY:   andreasm
@@ -50,7 +50,7 @@ jobs:
           password: ${{ secrets.AQUA_PASSWORD }}
 
       - name: pull / push ME Sidecar Image to Amazon ECR
-        id: build-image
+        id: me-image
         env:
           ME_Image:         registry.aquasec.com/microenforcer-basic:2022.4
           ECR_REPOSITORY:   andreasm
