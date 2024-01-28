@@ -65,4 +65,11 @@ jobs:
           docker tag $Registry/$Image:$Tag $ECR_REGISTRY/$ECR_REPOSITORY:$Image
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$Image
           echo "me_image=$ECR_REGISTRY/$ECR_REPOSITORY:$Image" >> $GITHUB_OUTPUT
-
+          
+      - name: Deploy to Amazon ECS
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: MeSidecar-task-definition.json
+          service: MESidecar2
+          cluster: AndreasMCluster
+          wait-for-service-stability: true

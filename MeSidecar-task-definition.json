@@ -1,0 +1,141 @@
+{
+    "taskDefinitionArn": "arn:aws:ecs:us-west-1:633291361733:task-definition/AndreasMmeSidecar:26",
+    "containerDefinitions": [
+        {
+            "name": "microenforcer",
+            "image": "633291361733.dkr.ecr.us-west-1.amazonaws.com/andreasm:microenforcer-basic",
+            "cpu": 0,
+            "portMappings": [],
+            "essential": false,
+            "environment": [],
+            "environmentFiles": [],
+            "mountPoints": [],
+            "volumesFrom": [],
+            "ulimits": []
+        },
+        {
+            "name": "nginx",
+            "image": "633291361733.dkr.ecr.us-west-1.amazonaws.com/andreasm:nginx",
+            "cpu": 0,
+            "portMappings": [
+                {
+                    "name": "nginx-80-tcp",
+                    "containerPort": 80,
+                    "hostPort": 80,
+                    "protocol": "tcp",
+                    "appProtocol": "http"
+                }
+            ],
+            "essential": true,
+            "entryPoint": [
+                "/.aquasec/bin/microenforcer"
+            ],
+            "command": [
+                "nginx",
+                "-g",
+                "daemon off;"
+            ],
+            "environment": [
+                {
+                    "name": "AQUA_TOKEN",
+                    "value": "edc5deb6-828c-4cc9-82b0-8621212a697f"
+                },
+                {
+                    "name": "AQUA_DEBUG_LEVEL",
+                    "value": "3"
+                },
+                {
+                    "name": "AQUA_DEBUG_TYPE",
+                    "value": "STDOUT"
+                },
+                {
+                    "name": "AQUA_MICROENFORCER",
+                    "value": "1"
+                },
+                {
+                    "name": "AQUA_IMAGE_ID_OLD",
+                    "value": "sha256:a8758716bb6aa4d90071160d27028fe4eaee7ce8166221a97d30440c8eac2be6"
+                },
+                {
+                    "name": "LD_PRELOAD",
+                    "value": "/.aquasec/bin/$PLATFORM/slklib.so"
+                },
+                {
+                    "name": "AQUA_SERVER",
+                    "value": "c1fae5dbe2-gw.cloud.aquasec.com:443"
+                }
+            ],
+            "environmentFiles": [],
+            "mountPoints": [],
+            "volumesFrom": [
+                {
+                    "sourceContainer": "microenforcer",
+                    "readOnly": false
+                }
+            ],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-create-group": "true",
+                    "awslogs-group": "/ecs/AndreasMmeSidecar",
+                    "awslogs-region": "us-west-1",
+                    "awslogs-stream-prefix": "ecs"
+                },
+                "secretOptions": []
+            }
+        }
+    ],
+    "family": "AndreasMmeSidecar",
+    "taskRoleArn": "arn:aws:iam::633291361733:role/ecsTaskExecutionRole",
+    "executionRoleArn": "arn:aws:iam::633291361733:role/ecsTaskExecutionRole",
+    "networkMode": "awsvpc",
+    "revision": 26,
+    "volumes": [],
+    "status": "ACTIVE",
+    "requiresAttributes": [
+        {
+            "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
+        },
+        {
+            "name": "ecs.capability.execution-role-awslogs"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.ecr-auth"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.task-iam-role"
+        },
+        {
+            "name": "ecs.capability.execution-role-ecr-pull"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+        },
+        {
+            "name": "ecs.capability.task-eni"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.29"
+        }
+    ],
+    "placementConstraints": [],
+    "compatibilities": [
+        "EC2",
+        "FARGATE"
+    ],
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "cpu": "512",
+    "memory": "1024",
+    "runtimePlatform": {
+        "cpuArchitecture": "X86_64",
+        "operatingSystemFamily": "LINUX"
+    },
+    "registeredAt": "2024-01-23T16:37:56.501Z",
+    "registeredBy": "arn:aws:sts::633291361733:assumed-role/AWSReservedSSO_aws-aqua-cross-dep-cs_a0e00c70a27940bd/ziv.lifshits@aquasec.com",
+    "tags": []
+}
