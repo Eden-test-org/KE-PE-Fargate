@@ -33,14 +33,15 @@ jobs:
       - name: pull / push App Image to Amazon ECR
         id: app-image
         env:
-          App_Image:        nginx
+          Image:            nginx
+          Tag:              latest
           ECR_REPOSITORY:   andreasm
           ECR_REGISTRY:     ${{ steps.login-ecr.outputs.registry }}
         run: |
-          docker pull $App_Image
-          docker tag $App_Image $ECR_REGISTRY/$ECR_REPOSITORY:$App_Image
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$App_Image
-          echo "app_image=$ECR_REGISTRY/$ECR_REPOSITORY:$App_Image" >> $GITHUB_OUTPUT
+          docker pull $Image:$Tag
+          docker tag $Image:$Tag $ECR_REGISTRY/$ECR_REPOSITORY:$Image
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$Image
+          echo "app_image=$ECR_REGISTRY/$ECR_REPOSITORY:$Image" >> $GITHUB_OUTPUT
 
       - name: Login to registry.aquasec.com
         id: login-registry-aquasec-com
@@ -53,13 +54,14 @@ jobs:
       - name: pull / push ME Sidecar Image to Amazon ECR
         id: me-image
         env:
-          ME_Image:         registry.aquasec.com/microenforcer-basic:2022.4
+          Image:            registry.aquasec.com/microenforcer-basic
+          Tag:              2022.4
           ECR_REPOSITORY:   andreasm
           ECR_REGISTRY:     ${{ steps.login-ecr.outputs.registry }}
           AQUA_REGISTRY:    ${{ steps.login-registry-aquasec-com.outputs.registry }}
         run: |
-          docker pull $ME_Image
-          docker tag $ME_Image $ECR_REGISTRY/$ECR_REPOSITORY:$ME_Image
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$ME_Image
-          echo "me_image=$ECR_REGISTRY/$ECR_REPOSITORY:$ME_Image" >> $GITHUB_OUTPUT
+          docker pull $Image:$Tag
+          docker tag $Image:$Tag $ECR_REGISTRY/$ECR_REPOSITORY:$Image
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$Image
+          echo "me_image=$ECR_REGISTRY/$ECR_REPOSITORY:$Image" >> $GITHUB_OUTPUT
 
