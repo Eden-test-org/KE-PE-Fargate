@@ -21,7 +21,7 @@ jobs:
             aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
             aws-region: us-east-1
         
-## chatGPT lügt  - es gibt keine aws-actions/configure-aws-cli !!!
+## chatGPT lügt  - es gibt keine aws-actions/configure-aws-cli und wohl auch keine Parameter für "aws configure sso" !!!
       # - name: Configure AWS CLI
         # uses: aws-actions/configure-aws-cli@v2
 
@@ -33,15 +33,15 @@ jobs:
       # - name: Configure AWS CLI for SSO
         # run: |
           # aws configure sso \
-            # --profile sso-profile \
+            # --profile AndreasM-aws-sso-session \
             # --region us-east-1 \
             # --sso-start-url https://aqua-sso.awsapps.com/start# \
             # --sso-region us-east-1 \
             # --sso-account-id 633291361733 \
             # --sso-role-name aws-aqua-cross-dep-cs
 
-          # aws sso login --profile sso-profile
+          # aws sso login --profile AndreasM-aws-sso-session
 
       - name: Use SSO profile
         run: |
-          aws s3 ls --profile sso-profile
+          aws s3 ls --profile aws-aqua-cross-dep-cs-633291361733
