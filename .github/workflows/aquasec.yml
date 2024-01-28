@@ -68,6 +68,8 @@ jobs:
           
       - name: Deploy to Amazon ECS
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        env:
+          AWS_REGION: us-west-1  # Specify your AWS region here
         with:
           task-definition: MeSidecar-task-definition.json
           service: MESidecar2
