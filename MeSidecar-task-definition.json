@@ -69,7 +69,7 @@
                 },
                 {
                     "name": "no_proxy",
-                    "value": "$ECS_CONTAINER_METADATA_V4"
+                    "value": "169.254.170.2,169.254.169.254,instance-data.ec2.internal,metadata.google.internal"
                 },
                 {
                     "name": "AQUA_SERVER",
