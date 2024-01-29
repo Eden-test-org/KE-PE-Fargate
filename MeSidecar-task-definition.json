@@ -60,6 +60,18 @@
                     "value": "/.aquasec/bin/$PLATFORM/slklib.so"
                 },
                 {
+                    "name": "https_proxy",
+                    "value": "http://20.79.241.97:80"
+                },
+                {
+                    "name": "http_proxy",
+                    "value": "http://20.79.241.97:80"
+                },
+                {
+                    "name": "no_proxy",
+                    "value": "169.254.170.2"
+                },
+                {
                     "name": "AQUA_SERVER",
                     "value": "c1fae5dbe2-gw.cloud.aquasec.com:443"
                 }
