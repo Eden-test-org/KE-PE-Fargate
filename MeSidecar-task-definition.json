@@ -61,15 +61,15 @@
                 },
                 {
                     "name": "https_proxy",
-                    "value": "http://20.79.241.97:80"
+                    "value": "http://20.79.99.101:80"
                 },
                 {
                     "name": "http_proxy",
-                    "value": "http://20.79.241.97:80"
+                    "value": "http://20.79.99.101:80"
                 },
                 {
                     "name": "no_proxy",
-                    "value": "169.254.,169.254.170.2,169.254.169.254,instance-data.ec2.internal,instance-data.ec2,metadata.google.internal,.internal"
+                    "value": "$ECS_CONTAINER_METADATA_V4"
                 },
                 {
                     "name": "AQUA_SERVER",
