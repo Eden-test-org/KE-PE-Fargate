@@ -69,7 +69,7 @@
                 },
                 {
                     "name": "no_proxy",
-                    "value": "instance-data.ec2.internal,instance-data.ec2,metadata.google.internal,.internal,169.254."
+                    "value": "169.254.,169.254.170.2,169.254.169.254,instance-data.ec2.internal,instance-data.ec2,metadata.google.internal,.internal"
                 },
                 {
                     "name": "AQUA_SERVER",
