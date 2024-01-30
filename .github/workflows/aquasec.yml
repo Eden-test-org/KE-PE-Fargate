@@ -89,12 +89,12 @@ jobs:
           # docker push $ECR_REGISTRY/$ECR_REPOSITORY:$Image
           # echo "me_image=$ECR_REGISTRY/$ECR_REPOSITORY:$Image" >> $GITHUB_OUTPUT
           
-      # - name: Deploy Task to ECS (on existing cluster / service)
-        # uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-        # env:
-          # AWS_REGION: us-west-1  # Specify your AWS region here
-        # with:
-          # task-definition: MeSidecar-task-definition.json
-          # service: MESidecar
-          # cluster: AndreasMCluster3
-          # wait-for-service-stability: true
+      - name: Deploy Task to ECS (on existing cluster / service)
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        env:
+          AWS_REGION: us-west-1  # Specify your AWS region here
+        with:
+          task-definition: MeSidecar-task-definition.json
+          service: MESidecar
+          cluster: AndreasMCluster3
+          wait-for-service-stability: true
