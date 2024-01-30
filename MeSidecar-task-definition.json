@@ -96,7 +96,7 @@
             }
         }
     ],
-    "family": "AndreasMmeSidecar",
+    "family": "AndreasM-ME-Sidecar",
     "taskRoleArn": "arn:aws:iam::633291361733:role/ecsTaskExecutionRole",
     "executionRoleArn": "arn:aws:iam::633291361733:role/ecsTaskExecutionRole",
     "networkMode": "awsvpc",
