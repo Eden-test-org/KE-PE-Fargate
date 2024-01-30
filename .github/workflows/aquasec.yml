@@ -26,6 +26,11 @@ jobs:
 #        env:
 #          AWS_REGION: us-west-1  # Specify your AWS region here
           
+      - name: Your AWS CLI Command
+        run: aws ecs create-cluster --cluster-name AndreasMCluster3 --region us-west-1 --capacity-providers FARGATE 
+        env:
+          AWS_REGION: us-west-1  # Specify your AWS region here
+          
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
