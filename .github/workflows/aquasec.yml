@@ -76,5 +76,5 @@ jobs:
         with:
           task-definition: MeSidecar-task-definition.json
           service: MESidecar
-          cluster: AndreasMCluster
+          cluster: AndreasMCluster3
           wait-for-service-stability: true
