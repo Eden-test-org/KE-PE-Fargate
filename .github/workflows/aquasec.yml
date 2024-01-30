@@ -30,7 +30,7 @@ jobs:
 
 ### einfach einen Cluster anlegen und existierende Task Definition als FARGATE starten          
       - name: aws ecs create-cluster
-        run: aws ecs create-cluster --cluster-name AndreasMCluster4 --region us-west-1 --capacity-providers FARGATE 
+        run: aws ecs create-cluster --cluster-name AndreasMCluster --region us-west-1 --capacity-providers FARGATE 
           
 #      - name: run FARGATE task
 #        run: aws ecs run-task --cluster AndreasMCluster --task-definition AndreasMmeSidecar:21 --launch-type="FARGATE" --region us-west-1 --network-configuration '{"awsvpcConfiguration":{"assignPublicIp":"ENABLED","securityGroups":["sg-0b323ecaeb5d39379"],"subnets":["subnet-046ad0cd38c7e05cb","subnet-0b0db515a07b3a402","subnet-02081b7a023f2661f","subnet-070627f825b1ca7a5","subnet-09f04cf8eda5f7f00","subnet-0428c45315633c12f","subnet-0ed8ad693f0ac237e","subnet-0b774184c69364847"]}}'
@@ -39,7 +39,7 @@ jobs:
         run: aws ecs register-task-definition --region us-west-1 --family AndreasM-ME-Sidecar --container-definitions "[{\"name\":\"sleep\",\"image\":\"busybox\",\"cpu\":256,\"command\":[\"sleep\",\"360\"],\"memory\":512,\"essential\":true}]" --requires-compatibilities "FARGATE" --network-mode "awsvpc" --cpu "256" --memory "512"
 
       - name: create service on cluster
-        run: aws ecs create-service --region us-west-1 --cluster AndreasMCluster4 --service-name MESidecar --task-definition AndreasM-ME-Sidecar --desired-count 1 --launch-type FARGATE --platform-version LATEST --network-configuration '{"awsvpcConfiguration":{"assignPublicIp":"ENABLED","securityGroups":["sg-0b323ecaeb5d39379"],"subnets":["subnet-046ad0cd38c7e05cb","subnet-0b0db515a07b3a402","subnet-02081b7a023f2661f","subnet-070627f825b1ca7a5","subnet-09f04cf8eda5f7f00","subnet-0428c45315633c12f","subnet-0ed8ad693f0ac237e","subnet-0b774184c69364847"]}}'
+        run: aws ecs create-service --region us-west-1 --cluster AndreasMCluster --service-name MESidecar --task-definition AndreasM-ME-Sidecar --desired-count 1 --launch-type FARGATE --platform-version LATEST --network-configuration '{"awsvpcConfiguration":{"assignPublicIp":"ENABLED","securityGroups":["sg-0b323ecaeb5d39379"],"subnets":["subnet-046ad0cd38c7e05cb","subnet-0b0db515a07b3a402","subnet-02081b7a023f2661f","subnet-070627f825b1ca7a5","subnet-09f04cf8eda5f7f00","subnet-0428c45315633c12f","subnet-0ed8ad693f0ac237e","subnet-0b774184c69364847"]}}'
 
         
 
@@ -47,9 +47,9 @@ jobs:
 ## default ist: export AWS_PAGER="less" - zum deaktivieren: export AWS_PAGER="" - oder aws ... --no-cli-pager
 ## aws ecs stop-task --cluster AndreasMCluster --region us-west-1 --task b60c0efe4d914af197bc2b0268780ca4
 ##
-## aws ecs list-services --region us-west-1 --cluster AndreasMCluster4
-## aws ecs update-service --region us-west-1 --cluster AndreasMCluster4 --service MESidecar --desired-count 0
-## aws ecs delete-service --region us-west-1 --cluster AndreasMCluster4 --service MESidecar
+## aws ecs list-services --region us-west-1 --cluster AndreasMCluster
+## aws ecs update-service --region us-west-1 --cluster AndreasMCluster --service MESidecar --desired-count 0
+## aws ecs delete-service --region us-west-1 --cluster AndreasMCluster --service MESidecar
 ## aws ecs delete-cluster --region us-west-1 --cluster AndreasMCluster 
 ##
 ## aws ecs list-task-definitions --region us-west-1 --family-prefix AndreasM-ME-Sidecar --no-cli-pager
@@ -104,5 +104,5 @@ jobs:
         with:
           task-definition: MeSidecar-task-definition.json
           service: MESidecar
-          cluster: AndreasMCluster4
+          cluster: AndreasMCluster
           wait-for-service-stability: true
