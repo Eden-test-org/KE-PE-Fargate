@@ -21,17 +21,32 @@ jobs:
           aws_secret_access_key =   ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_session_token     =   ${{ secrets.AWS_SESSION_TOKEN }}" > ~/.aws/credentials
 
+### sa https://docs.aws.amazon.com/cli/latest/reference/ecs/
+
 #     - name: Your AWS CLI Command
 #        run: aws s3 ls  # Replace with your actual AWS CLI command
 #        env:
 #          AWS_REGION: us-west-1  # Specify your AWS region here
-          
+
+### einfach einen Cluster anlegen und existierende Task Definition als FARGATE starten          
       - name: aws ecs create-cluster
         run: aws ecs create-cluster --cluster-name AndreasMCluster3 --region us-west-1 --capacity-providers FARGATE 
           
       - name: run FARGATE task
         run: aws ecs run-task --cluster AndreasMCluster3 --task-definition AndreasMmeSidecar:21 --launch-type="FARGATE" --region us-west-1 --network-configuration '{"awsvpcConfiguration":{"assignPublicIp":"ENABLED","securityGroups":["sg-0b323ecaeb5d39379"],"subnets":["subnet-046ad0cd38c7e05cb","subnet-0b0db515a07b3a402","subnet-02081b7a023f2661f","subnet-070627f825b1ca7a5","subnet-09f04cf8eda5f7f00","subnet-0428c45315633c12f","subnet-0ed8ad693f0ac237e","subnet-0b774184c69364847"]}}'
-          
+        
+      - name: register dummy task definition
+        run: aws ecs register-task-definition --region us-west-1 --family AndreasM-ME-Sidecar --container-definitions "[{\"name\":\"sleep\",\"image\":\"busybox\",\"cpu\":256,\"command\":[\"sleep\",\"360\"],\"memory\":512,\"essential\":true}]" --requires-compatibilities "FARGATE" --network-mode "awsvpc" --cpu "256" --memory "512"
+
+        
+        
+
+## für aws cli output in bash (sa https://docs.aws.amazon.com/cli/latest/userguide/cli-usage-pagination.html#cli-usage-pagination-clientside)
+## default ist: export AWS_PAGER="less" - zum deaktivieren: export AWS_PAGER="" - oder aws ... --no-cli-pager
+## aws ecs stop-task --cluster AndreasMCluster3 --region us-west-1 --task b60c0efe4d914af197bc2b0268780ca4
+## aws ecs delete-cluster --cluster AndreasMCluster3 --region us-west-1
+
+### alternativ: App + ME images frisch runterladen und auf ECR hochladen, neue Task Definition aus Template anlegen und Task im existierenden Cluster und Service starten
       # - name: Login to Amazon ECR
         # id: login-ecr
         # uses: aws-actions/amazon-ecr-login@v1
