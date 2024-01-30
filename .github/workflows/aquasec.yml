@@ -29,8 +29,8 @@ jobs:
       - name: aws ecs create-cluster
         run: aws ecs create-cluster --cluster-name AndreasMCluster3 --region us-west-1 --capacity-providers FARGATE 
           
-      - name: aws ecs create-cluster
-        run: aws ecs create-cluster --cluster-name AndreasMCluster3 --region us-west-1 --capacity-providers FARGATE 
+      - name: run FARGATE task
+        run: aws ecs run-task --cluster AndreasMCluster3 --task-definition AndreasMmeSidecar:21 --launch-type="FARGATE" --region us-west-1 --network-configuration '{"awsvpcConfiguration":{"assignPublicIp":"ENABLED","securityGroups":["sg-0b323ecaeb5d39379"],"subnets":["subnet-046ad0cd38c7e05cb","subnet-0b0db515a07b3a402","subnet-02081b7a023f2661f","subnet-070627f825b1ca7a5","subnet-09f04cf8eda5f7f00","subnet-0428c45315633c12f","subnet-0ed8ad693f0ac237e","subnet-0b774184c69364847"]}}'
           
       # - name: Login to Amazon ECR
         # id: login-ecr
@@ -72,12 +72,12 @@ jobs:
           # docker push $ECR_REGISTRY/$ECR_REPOSITORY:$Image
           # echo "me_image=$ECR_REGISTRY/$ECR_REPOSITORY:$Image" >> $GITHUB_OUTPUT
           
-      - name: Deploy Task to ECS (on existing cluster / service)
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-        env:
-          AWS_REGION: us-west-1  # Specify your AWS region here
-        with:
-          task-definition: MeSidecar-task-definition.json
-          service: MESidecar
-          cluster: AndreasMCluster3
-          wait-for-service-stability: true
+      # - name: Deploy Task to ECS (on existing cluster / service)
+        # uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        # env:
+          # AWS_REGION: us-west-1  # Specify your AWS region here
+        # with:
+          # task-definition: MeSidecar-task-definition.json
+          # service: MESidecar
+          # cluster: AndreasMCluster3
+          # wait-for-service-stability: true
