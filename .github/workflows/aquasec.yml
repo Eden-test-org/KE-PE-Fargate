@@ -101,7 +101,8 @@ jobs:
           # wait-for-service-stability: true
           
       - name: End pipeline
-        run: exit 0          
+#        run: exit 0          
+        run: gh run cancel ${{ github.run_id }}
 
 
 ### Wenn Cluster noch nicht existiert
