@@ -27,19 +27,19 @@ jobs:
           aws_session_token     =   ${{ secrets.AWS_SESSION_TOKEN }}" > ~/.aws/credentials
           
 
-    - name: Set Names
-      run: |
-        echo "ClusterName=AndreasMCluster" >> $GITHUB_ENV
-        echo "TaskDefinition=AndreasM-ME-Sidecar" >> $GITHUB_ENV
-
-    - name: Check if the cluster already exists
-      id: ClusterExists
-      run: |
-        echo
-#        CLUSTER_NAME=$ClusterName
-#        CLUSTER_NAME=AndreasMCluster
-#        echo $CLUSTER_NAME
-#        aws ecs list-clusters --region us-west-1 --query "contains(clusterArns,'arn:aws:ecs:us-west-1:633291361733:cluster/${{ env.ClusterName }}')"
+      - name: Set Names
+        run: |
+          echo "ClusterName=AndreasMCluster" >> $GITHUB_ENV
+          echo "TaskDefinition=AndreasM-ME-Sidecar" >> $GITHUB_ENV
+      
+      - name: Check if the cluster already exists
+        id: ClusterExists
+        run: |
+          echo
+           CLUSTER_NAME=$ClusterName
+           CLUSTER_NAME=AndreasMCluster
+           echo $CLUSTER_NAME
+           aws ecs list-clusters --region us-west-1 --query "contains(clusterArns,'arn:aws:ecs:us-west-1:633291361733:cluster/${{ env.ClusterName }}')"
           
 
 # ### sa https://docs.aws.amazon.com/cli/latest/reference/ecs/
