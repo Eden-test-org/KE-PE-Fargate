@@ -86,7 +86,7 @@ jobs:
 
       - name: Check if the cluster already exists
         id: ClusterExists
-        run: aws ecs list-clusters --region us-west-1 --query "contains(clusterArns,'arn:aws:ecs:us-west-1:633291361733:cluster/AndreasMCluster')"
+        run: echo "::set-output name=result::$(aws ecs list-clusters --region us-west-1 --query "contains(clusterArns,'arn:aws:ecs:us-west-1:633291361733:cluster/AndreasMCluster')")"
   
 ### Wenn Cluster schon existiert, neue Task Definition aus Template anlegen und Task im existierenden Cluster und Service starten
       - name: Deploy Task to ECS (on existing cluster / service)
