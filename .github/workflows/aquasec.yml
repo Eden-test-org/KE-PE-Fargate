@@ -35,9 +35,9 @@ jobs:
     - name: Check if the cluster already exists
       id: ClusterExists
       run: |
-        CLUSTER_NAME=$ClusterName
+#        CLUSTER_NAME=$ClusterName
 #        CLUSTER_NAME=AndreasMCluster
-        echo $CLUSTER_NAME
+#        echo $CLUSTER_NAME
 #        aws ecs list-clusters --region us-west-1 --query "contains(clusterArns,'arn:aws:ecs:us-west-1:633291361733:cluster/${{ env.ClusterName }}')"
           
 
