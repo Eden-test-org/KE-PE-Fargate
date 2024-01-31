@@ -87,6 +87,13 @@ jobs:
       - name: Check if the cluster already exists
         id: ClusterExists
         run: echo "::set-output name=result::$(aws ecs list-clusters --region us-west-1 --query "contains(clusterArns,'arn:aws:ecs:us-west-1:633291361733:cluster/AndreasMCluster')")"
+
+      - name: Set Environment Variable
+        run: echo "MY_VARIABLE=example_value" >> $GITHUB_ENV
+  
+      - name: Use Environment Variable
+        run: |
+          echo "Value of MY_VARIABLE: $MY_VARIABLE"
   
 # ### Wenn Cluster schon existiert, neue Task Definition aus Template anlegen und Task im existierenden Cluster und Service starten
       # - name: Deploy Task to ECS (on existing cluster / service)
@@ -101,15 +108,15 @@ jobs:
           # wait-for-service-stability: true
           
       - name: End pipeline
-#        run: exit 1
-        run: exit 0          
-#        run: gh run cancel ${{ github.run_id }}
-#        run: gh run cancel 0
+      ## geht aber nicht - in GH gibt es keine Möglichkeit nachfolgende Steps sauber zu überspringen, außer man läßt den Step / Pipeline fehlschlagen :-(
+        run: exit 1
+        # run: exit 0          
 
 
 ### Wenn Cluster noch nicht existiert
 ### einfach einen Cluster anlegen und existierende Task Definition als FARGATE starten          
       - name: aws ecs create-cluster
+        if: steps.ClusterExists.outputs.result == 'false'
         run: aws ecs create-cluster --cluster-name AndreasMCluster --region us-west-1 --capacity-providers FARGATE 
           
 #      - name: run FARGATE task
