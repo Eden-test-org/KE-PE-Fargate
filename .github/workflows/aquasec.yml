@@ -37,7 +37,7 @@ jobs:
       run: |
 #        CLUSTER_NAME=$ClusterName
         CLUSTER_NAME=AndreasMCluster
-        echo "::set-output name=result::$(aws ecs list-clusters --region us-west-1 --query \"contains(clusterArns,'arn:aws:ecs:us-west-1:633291361733:cluster/$CLUSTER_NAME')\")"          
+        echo "::set-output name=result::$(aws ecs list-clusters --region us-west-1 --query \"contains(clusterArns,'arn:aws:ecs:us-west-1:633291361733:cluster/${{ env.ClusterName }}')\")"          
           
 
 ### sa https://docs.aws.amazon.com/cli/latest/reference/ecs/
