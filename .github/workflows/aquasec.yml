@@ -86,14 +86,13 @@ jobs:
 
       - name: Check if the cluster already exists
         id: ClusterExists
-        run: echo "::set-output name=result::$(aws ecs list-clusters --region us-west-1 --query "contains(clusterArns,'arn:aws:ecs:us-west-1:633291361733:cluster/AndreasMCluster')")"
-
-      - name: Set Environment Variable
-        run: echo "MY_VARIABLE=example_value" >> $GITHUB_ENV
-  
+        run: |
+            echo "::set-output name=result::$(aws ecs list-clusters --region us-west-1 --query "contains(clusterArns,'arn:aws:ecs:us-west-1:633291361733:cluster/AndreasMCluster')")"
+            echo "ClusterExists=$(aws ecs list-clusters --region us-west-1 --query "contains(clusterArns,'arn:aws:ecs:us-west-1:633291361733:cluster/AndreasMCluster')")" >> $GITHUB_ENV
+            
       - name: Use Environment Variable
         run: |
-          echo "Value of MY_VARIABLE: $MY_VARIABLE"
+          echo "Value of MY_VARIABLE: $ClusterExists"
   
 # ### Wenn Cluster schon existiert, neue Task Definition aus Template anlegen und Task im existierenden Cluster und Service starten
       # - name: Deploy Task to ECS (on existing cluster / service)
