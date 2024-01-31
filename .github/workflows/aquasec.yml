@@ -28,81 +28,86 @@ jobs:
 #        env:
 #          AWS_REGION: us-west-1  # Specify your AWS region here
 
-### einfach einen Cluster anlegen und existierende Task Definition als FARGATE starten          
-      - name: aws ecs create-cluster
-        run: aws ecs create-cluster --cluster-name AndreasMCluster --region us-west-1 --capacity-providers FARGATE 
+# ### einfach einen Cluster anlegen und existierende Task Definition als FARGATE starten          
+      # - name: aws ecs create-cluster
+        # run: aws ecs create-cluster --cluster-name AndreasMCluster --region us-west-1 --capacity-providers FARGATE 
           
-#      - name: run FARGATE task
-#        run: aws ecs run-task --cluster AndreasMCluster --task-definition AndreasMmeSidecar:21 --launch-type="FARGATE" --region us-west-1 --network-configuration '{"awsvpcConfiguration":{"assignPublicIp":"ENABLED","securityGroups":["sg-0b323ecaeb5d39379"],"subnets":["subnet-046ad0cd38c7e05cb","subnet-0b0db515a07b3a402","subnet-02081b7a023f2661f","subnet-070627f825b1ca7a5","subnet-09f04cf8eda5f7f00","subnet-0428c45315633c12f","subnet-0ed8ad693f0ac237e","subnet-0b774184c69364847"]}}'
-        
-      - name: register dummy task definition
-        run: aws ecs register-task-definition --region us-west-1 --family AndreasM-ME-Sidecar --container-definitions "[{\"name\":\"sleep\",\"image\":\"busybox\",\"cpu\":256,\"command\":[\"sleep\",\"360\"],\"memory\":512,\"essential\":true}]" --requires-compatibilities "FARGATE" --network-mode "awsvpc" --cpu "256" --memory "512"
+# #      - name: run FARGATE task
+# #        run: aws ecs run-task --cluster AndreasMCluster --task-definition AndreasMmeSidecar:21 --launch-type="FARGATE" --region us-west-1 --network-configuration '{"awsvpcConfiguration":{"assignPublicIp":"ENABLED","securityGroups":["sg-0b323ecaeb5d39379"],"subnets":["subnet-046ad0cd38c7e05cb","subnet-0b0db515a07b3a402","subnet-02081b7a023f2661f","subnet-070627f825b1ca7a5","subnet-09f04cf8eda5f7f00","subnet-0428c45315633c12f","subnet-0ed8ad693f0ac237e","subnet-0b774184c69364847"]}}'
 
-      - name: create service on cluster
-        run: aws ecs create-service --region us-west-1 --cluster AndreasMCluster --service-name MESidecar --task-definition AndreasM-ME-Sidecar --desired-count 1 --launch-type FARGATE --platform-version LATEST --network-configuration '{"awsvpcConfiguration":{"assignPublicIp":"ENABLED","securityGroups":["sg-0b323ecaeb5d39379"],"subnets":["subnet-046ad0cd38c7e05cb","subnet-0b0db515a07b3a402","subnet-02081b7a023f2661f","subnet-070627f825b1ca7a5","subnet-09f04cf8eda5f7f00","subnet-0428c45315633c12f","subnet-0ed8ad693f0ac237e","subnet-0b774184c69364847"]}}'
+      # - name: Was hab ich
+        # run: ls -lR *
+
 
         
+      # - name: register dummy task definition
+        # run: aws ecs register-task-definition --region us-west-1 --family AndreasM-ME-Sidecar --container-definitions "[{\"name\":\"sleep\",\"image\":\"busybox\",\"cpu\":256,\"command\":[\"sleep\",\"360\"],\"memory\":512,\"essential\":true}]" --requires-compatibilities "FARGATE" --network-mode "awsvpc" --cpu "256" --memory "512"
 
-## für aws cli output in bash (sa https://docs.aws.amazon.com/cli/latest/userguide/cli-usage-pagination.html#cli-usage-pagination-clientside)
-## default ist: export AWS_PAGER="less" - zum deaktivieren: export AWS_PAGER="" - oder aws ... --no-cli-pager
-## aws ecs stop-task --cluster AndreasMCluster --region us-west-1 --task b60c0efe4d914af197bc2b0268780ca4
-##
-## aws ecs list-services --region us-west-1 --cluster AndreasMCluster
-## aws ecs update-service --region us-west-1 --cluster AndreasMCluster --service MESidecar --desired-count 0
-## aws ecs delete-service --region us-west-1 --cluster AndreasMCluster --service MESidecar
-## aws ecs delete-cluster --region us-west-1 --cluster AndreasMCluster 
-##
-## aws ecs list-task-definitions --region us-west-1 --family-prefix AndreasM-ME-Sidecar --no-cli-pager
-## aws ecs deregister-task-definition --region us-west-1 --task-definition arn:aws:ecs:us-west-1:633291361733:task-definition/AndreasM-ME-Sidecar:6
+      # - name: create service on cluster
+        # run: aws ecs create-service --region us-west-1 --cluster AndreasMCluster --service-name MESidecar --task-definition AndreasM-ME-Sidecar --desired-count 1 --launch-type FARGATE --platform-version LATEST --network-configuration '{"awsvpcConfiguration":{"assignPublicIp":"ENABLED","securityGroups":["sg-0b323ecaeb5d39379"],"subnets":["subnet-046ad0cd38c7e05cb","subnet-0b0db515a07b3a402","subnet-02081b7a023f2661f","subnet-070627f825b1ca7a5","subnet-09f04cf8eda5f7f00","subnet-0428c45315633c12f","subnet-0ed8ad693f0ac237e","subnet-0b774184c69364847"]}}'
+
+        
+
+# ## für aws cli output in bash (sa https://docs.aws.amazon.com/cli/latest/userguide/cli-usage-pagination.html#cli-usage-pagination-clientside)
+# ## default ist: export AWS_PAGER="less" - zum deaktivieren: export AWS_PAGER="" - oder aws ... --no-cli-pager
+# ## aws ecs stop-task --cluster AndreasMCluster --region us-west-1 --task b60c0efe4d914af197bc2b0268780ca4
+# ##
+# ## aws ecs list-services --region us-west-1 --cluster AndreasMCluster
+# ## aws ecs update-service --region us-west-1 --cluster AndreasMCluster --service MESidecar --desired-count 0
+# ## aws ecs delete-service --region us-west-1 --cluster AndreasMCluster --service MESidecar
+# ## aws ecs delete-cluster --region us-west-1 --cluster AndreasMCluster 
+# ##
+# ## aws ecs list-task-definitions --region us-west-1 --family-prefix AndreasM-ME-Sidecar --no-cli-pager
+# ## aws ecs deregister-task-definition --region us-west-1 --task-definition arn:aws:ecs:us-west-1:633291361733:task-definition/AndreasM-ME-Sidecar:6
 
 
-### alternativ: App + ME images frisch runterladen und auf ECR hochladen, neue Task Definition aus Template anlegen und Task im existierenden Cluster und Service starten
-      # - name: Login to Amazon ECR
-        # id: login-ecr
-        # uses: aws-actions/amazon-ecr-login@v1
+# ### alternativ: App + ME images frisch runterladen und auf ECR hochladen, neue Task Definition aus Template anlegen und Task im existierenden Cluster und Service starten
+      # # - name: Login to Amazon ECR
+        # # id: login-ecr
+        # # uses: aws-actions/amazon-ecr-login@v1
 
-      # - name: pull / push App Image to Amazon ECR
-        # id: app-image
+      # # - name: pull / push App Image to Amazon ECR
+        # # id: app-image
+        # # env:
+          # # Image:            nginx
+          # # Tag:              latest
+          # # ECR_REPOSITORY:   andreasm
+          # # ECR_REGISTRY:     ${{ steps.login-ecr.outputs.registry }}
+        # # run: |
+          # # docker pull $Image:$Tag
+          # # docker tag $Image:$Tag $ECR_REGISTRY/$ECR_REPOSITORY:$Image
+          # # docker push $ECR_REGISTRY/$ECR_REPOSITORY:$Image
+          # # echo "app_image=$ECR_REGISTRY/$ECR_REPOSITORY:$Image" >> $GITHUB_OUTPUT
+
+      # # - name: Login to registry.aquasec.com
+        # # id: login-registry-aquasec-com
+        # # uses: docker/login-action@v3
+        # # with:
+          # # registry: registry.aquasec.com
+          # # username: ${{ secrets.AQUA_USER }}
+          # # password: ${{ secrets.AQUA_PASSWORD }}
+
+      # # - name: pull / push ME Sidecar Image to Amazon ECR
+        # # id: me-image
+        # # env:
+          # # Registry:         registry.aquasec.com
+          # # Image:            microenforcer-basic
+          # # Tag:              2022.4
+          # # ECR_REPOSITORY:   andreasm
+          # # ECR_REGISTRY:     ${{ steps.login-ecr.outputs.registry }}
+          # # AQUA_REGISTRY:    ${{ steps.login-registry-aquasec-com.outputs.registry }}
+        # # run: |
+          # # docker pull $Registry/$Image:$Tag
+          # # docker tag $Registry/$Image:$Tag $ECR_REGISTRY/$ECR_REPOSITORY:$Image
+          # # docker push $ECR_REGISTRY/$ECR_REPOSITORY:$Image
+          # # echo "me_image=$ECR_REGISTRY/$ECR_REPOSITORY:$Image" >> $GITHUB_OUTPUT
+          
+      # - name: Deploy Task to ECS (on existing cluster / service)
+        # uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         # env:
-          # Image:            nginx
-          # Tag:              latest
-          # ECR_REPOSITORY:   andreasm
-          # ECR_REGISTRY:     ${{ steps.login-ecr.outputs.registry }}
-        # run: |
-          # docker pull $Image:$Tag
-          # docker tag $Image:$Tag $ECR_REGISTRY/$ECR_REPOSITORY:$Image
-          # docker push $ECR_REGISTRY/$ECR_REPOSITORY:$Image
-          # echo "app_image=$ECR_REGISTRY/$ECR_REPOSITORY:$Image" >> $GITHUB_OUTPUT
-
-      # - name: Login to registry.aquasec.com
-        # id: login-registry-aquasec-com
-        # uses: docker/login-action@v3
+          # AWS_REGION: us-west-1  # Specify your AWS region here
         # with:
-          # registry: registry.aquasec.com
-          # username: ${{ secrets.AQUA_USER }}
-          # password: ${{ secrets.AQUA_PASSWORD }}
-
-      # - name: pull / push ME Sidecar Image to Amazon ECR
-        # id: me-image
-        # env:
-          # Registry:         registry.aquasec.com
-          # Image:            microenforcer-basic
-          # Tag:              2022.4
-          # ECR_REPOSITORY:   andreasm
-          # ECR_REGISTRY:     ${{ steps.login-ecr.outputs.registry }}
-          # AQUA_REGISTRY:    ${{ steps.login-registry-aquasec-com.outputs.registry }}
-        # run: |
-          # docker pull $Registry/$Image:$Tag
-          # docker tag $Registry/$Image:$Tag $ECR_REGISTRY/$ECR_REPOSITORY:$Image
-          # docker push $ECR_REGISTRY/$ECR_REPOSITORY:$Image
-          # echo "me_image=$ECR_REGISTRY/$ECR_REPOSITORY:$Image" >> $GITHUB_OUTPUT
-          
-      - name: Deploy Task to ECS (on existing cluster / service)
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-        env:
-          AWS_REGION: us-west-1  # Specify your AWS region here
-        with:
-          task-definition: MeSidecar-task-definition.json
-          service: MESidecar
-          cluster: AndreasMCluster
-          wait-for-service-stability: true
+          # task-definition: MeSidecar-task-definition.json
+          # service: MESidecar
+          # cluster: AndreasMCluster
+          # wait-for-service-stability: true
