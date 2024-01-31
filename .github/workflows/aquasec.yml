@@ -44,7 +44,7 @@ jobs:
 #        run: aws ecs register-task-definition --region us-west-1 --family AndreasM-ME-Sidecar --container-definitions "[{\"name\":\"sleep\",\"image\":\"busybox\",\"cpu\":256,\"command\":[\"sleep\",\"360\"],\"memory\":512,\"essential\":true}]" --requires-compatibilities "FARGATE" --network-mode "awsvpc" --cpu "256" --memory "512"
 
       - name: register task definition
-        run: aws ecs register-task-definition --region us-west-1 --family AndreasM-ME-Sidecar --cli-input-json file://MeSidecar-task-definition.json
+        run: aws ecs register-task-definition --region us-west-1 --family AndreasM-ME-Sidecar --cli-input-json file://MeSidecar-task-definition.json --tags key="AndreasM",value="true"
         
         # --container-definitions "[{\"name\":\"sleep\",\"image\":\"busybox\",\"cpu\":256,\"command\":[\"sleep\",\"360\"],\"memory\":512,\"essential\":true}]" --requires-compatibilities "FARGATE" --network-mode "awsvpc" --cpu "256" --memory "512"
 
