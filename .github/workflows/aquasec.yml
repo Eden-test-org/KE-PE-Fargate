@@ -100,8 +100,6 @@ jobs:
           # docker push $ECR_REGISTRY/$ECR_REPOSITORY:$Image
           # echo "me_image=$ECR_REGISTRY/$ECR_REPOSITORY:$Image" >> $GITHUB_OUTPUT
 
-if 
-
       - name: Check if the cluster already exists
         id: ClusterExists
         run: aws ecs list-clusters --region us-west-1 --no-cli-pager --query "contains(clusterArns,'arn:aws:ecs:us-west-1:633291361733:cluster/AndreasMCluster')"
