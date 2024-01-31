@@ -88,17 +88,17 @@ jobs:
         id: ClusterExists
         run: echo "::set-output name=result::$(aws ecs list-clusters --region us-west-1 --query "contains(clusterArns,'arn:aws:ecs:us-west-1:633291361733:cluster/AndreasMCluster')")"
   
-### Wenn Cluster schon existiert, neue Task Definition aus Template anlegen und Task im existierenden Cluster und Service starten
-      - name: Deploy Task to ECS (on existing cluster / service)
-        if: steps.ClusterExists.outputs.result == 'true'
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-        env:
-          AWS_REGION: us-west-1
-        with:
-          task-definition: MeSidecar-task-definition.json
-          service: MESidecar
-          cluster: AndreasMCluster
-          wait-for-service-stability: true
+# ### Wenn Cluster schon existiert, neue Task Definition aus Template anlegen und Task im existierenden Cluster und Service starten
+      # - name: Deploy Task to ECS (on existing cluster / service)
+        # if: steps.ClusterExists.outputs.result == 'true'
+        # uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        # env:
+          # AWS_REGION: us-west-1
+        # with:
+          # task-definition: MeSidecar-task-definition.json
+          # service: MESidecar
+          # cluster: AndreasMCluster
+          # wait-for-service-stability: true
           
       - name: End pipeline
         run: exit 0          
