@@ -91,7 +91,7 @@ jobs:
             echo "SkipCosClusterExists=$(aws ecs list-clusters --region us-west-1 --query "contains(clusterArns,'arn:aws:ecs:us-west-1:633291361733:cluster/AndreasMCluster')")" >> $GITHUB_ENV
             
       - name: Use Environment Variable
-        if: echo "$SkipCosClusterExists"
+        if: env.SkipCosClusterExists == 'true'
         run: |
           echo "$SkipCosClusterExists"
   
