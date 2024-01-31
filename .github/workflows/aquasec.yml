@@ -43,78 +43,66 @@ jobs:
 
 
 ### App + ME images frisch runterladen und auf ECR hochladen
-      # - name: Login to Amazon ECR
-        # id: login-ecr
-        # uses: aws-actions/amazon-ecr-login@v1
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
 
-      # - name: pull / push App Image to Amazon ECR
-        # id: app-image
-        # env:
-          # Image:            nginx
-          # Tag:              latest
-          # ECR_REPOSITORY:   andreasm
-          # ECR_REGISTRY:     ${{ steps.login-ecr.outputs.registry }}
-        # run: |
-          # docker pull $Image:$Tag
-          # docker tag $Image:$Tag $ECR_REGISTRY/$ECR_REPOSITORY:$Image
-          # docker push $ECR_REGISTRY/$ECR_REPOSITORY:$Image
-          # echo "app_image=$ECR_REGISTRY/$ECR_REPOSITORY:$Image" >> $GITHUB_OUTPUT
+      - name: pull / push App Image to Amazon ECR
+        id: app-image
+        env:
+          Image:            nginx
+          Tag:              latest
+          ECR_REPOSITORY:   andreasm
+          ECR_REGISTRY:     ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          docker pull $Image:$Tag
+          docker tag $Image:$Tag $ECR_REGISTRY/$ECR_REPOSITORY:$Image
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$Image
+          echo "app_image=$ECR_REGISTRY/$ECR_REPOSITORY:$Image" >> $GITHUB_OUTPUT
 
-      # - name: Login to registry.aquasec.com
-        # id: login-registry-aquasec-com
-        # uses: docker/login-action@v3
-        # with:
-          # registry: registry.aquasec.com
-          # username: ${{ secrets.AQUA_USER }}
-          # password: ${{ secrets.AQUA_PASSWORD }}
+      - name: Login to registry.aquasec.com
+        id: login-registry-aquasec-com
+        uses: docker/login-action@v3
+        with:
+          registry: registry.aquasec.com
+          username: ${{ secrets.AQUA_USER }}
+          password: ${{ secrets.AQUA_PASSWORD }}
 
-      # - name: pull / push ME Sidecar Image to Amazon ECR
-        # id: me-image
-        # env:
-          # Registry:         registry.aquasec.com
-          # Image:            microenforcer-basic
-          # Tag:              2022.4
-          # ECR_REPOSITORY:   andreasm
-          # ECR_REGISTRY:     ${{ steps.login-ecr.outputs.registry }}
-          # AQUA_REGISTRY:    ${{ steps.login-registry-aquasec-com.outputs.registry }}
-        # run: |
-          # docker pull $Registry/$Image:$Tag
-          # docker tag $Registry/$Image:$Tag $ECR_REGISTRY/$ECR_REPOSITORY:$Image
-          # docker push $ECR_REGISTRY/$ECR_REPOSITORY:$Image
-          # echo "me_image=$ECR_REGISTRY/$ECR_REPOSITORY:$Image" >> $GITHUB_OUTPUT
+      - name: pull / push ME Sidecar Image to Amazon ECR
+        id: me-image
+        env:
+          Registry:         registry.aquasec.com
+          Image:            microenforcer-basic
+          Tag:              2022.4
+          ECR_REPOSITORY:   andreasm
+          ECR_REGISTRY:     ${{ steps.login-ecr.outputs.registry }}
+          AQUA_REGISTRY:    ${{ steps.login-registry-aquasec-com.outputs.registry }}
+        run: |
+          docker pull $Registry/$Image:$Tag
+          docker tag $Registry/$Image:$Tag $ECR_REGISTRY/$ECR_REPOSITORY:$Image
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$Image
+          echo "me_image=$ECR_REGISTRY/$ECR_REPOSITORY:$Image" >> $GITHUB_OUTPUT
 
 
       - name: Check if the cluster already exists
         id: ClusterExists
         run: |
             echo "::set-output name=result::$(aws ecs list-clusters --region us-west-1 --query "contains(clusterArns,'arn:aws:ecs:us-west-1:633291361733:cluster/AndreasMCluster')")"
-            echo "SkipCosClusterExists=$(aws ecs list-clusters --region us-west-1 --query "contains(clusterArns,'arn:aws:ecs:us-west-1:633291361733:cluster/AndreasMCluster')")" >> $GITHUB_ENV
-            
-      - name: Use Environment Variable
-        if: env.SkipCosClusterExists == 'true'
-        run: |
-          echo "$SkipCosClusterExists"
   
-# ### Wenn Cluster schon existiert, neue Task Definition aus Template anlegen und Task im existierenden Cluster und Service starten
-      # - name: Deploy Task to ECS (on existing cluster / service)
-        # if: steps.ClusterExists.outputs.result == 'true'
-        # uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-        # env:
-          # AWS_REGION: us-west-1
-        # with:
-          # task-definition: MeSidecar-task-definition.json
-          # service: MESidecar
-          # cluster: AndreasMCluster
-          # wait-for-service-stability: true
+### Wenn Cluster schon existiert, neue Task Definition aus Template anlegen und Task im existierenden Cluster und Service starten
+      - name: Deploy Task to ECS (on existing cluster / service)
+        if: steps.ClusterExists.outputs.result == 'true'
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        env:
+          AWS_REGION: us-west-1
+        with:
+          task-definition: MeSidecar-task-definition.json
+          service: MESidecar
+          cluster: AndreasMCluster
+          wait-for-service-stability: true
           
-#      - name: End pipeline
-      ## geht aber nicht - in GH gibt es keine Möglichkeit nachfolgende Steps sauber zu überspringen, außer man läßt den Step / Pipeline fehlschlagen :-(
- #       run: exit 1
-        # run: exit 0          
-
 
 ### Wenn Cluster noch nicht existiert
-### einfach einen Cluster anlegen und existierende Task Definition als FARGATE starten          
       - name: aws ecs create-cluster
         if: steps.ClusterExists.outputs.result == 'false'
         run: aws ecs create-cluster --cluster-name AndreasMCluster --region us-west-1 --capacity-providers FARGATE 
