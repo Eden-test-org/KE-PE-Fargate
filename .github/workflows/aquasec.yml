@@ -45,7 +45,7 @@ jobs:
 ##
 ## aws ecs list-task-definitions --region us-west-1 --family-prefix AndreasM-ME-Sidecar --no-cli-pager
 ## aws ecs deregister-task-definition --region us-west-1 --task-definition arn:aws:ecs:us-west-1:633291361733:task-definition/AndreasM-ME-Sidecar:6
-
+#
 
 ### App + ME images frisch runterladen und auf ECR hochladen
 
@@ -104,7 +104,6 @@ jobs:
 ### Wenn Cluster noch nicht existiert
       - name: aws ecs create-cluster
         if: steps.ClusterExists.outputs.result == 'false'
-#        run: aws ecs create-cluster --cluster-name AndreasMCluster --region us-west-1 --capacity-providers FARGATE 
         run: aws ecs create-cluster --cluster-name $ClusterName --region us-west-1 --capacity-providers FARGATE 
           
 #      - name: run FARGATE task
