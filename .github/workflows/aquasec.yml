@@ -21,10 +21,11 @@ jobs:
           aws_secret_access_key =   ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_session_token     =   ${{ secrets.AWS_SESSION_TOKEN }}" > ~/.aws/credentials
 
+### Set here your desired cluster name and name of your task definition family
       - name: Set Names
         run: |
-          echo "ClusterName=AndreasMCluster3" >> $GITHUB_ENV
-          echo "TaskDefinition=AndreasM-ME-Sidecars" >> $GITHUB_ENV
+          echo "ClusterName=AndreasMCluster" >> $GITHUB_ENV
+          echo "TaskDefinition=AndreasM-ME-Sidecars >> $GITHUB_ENV
       
 ### sa https://docs.aws.amazon.com/cli/latest/reference/ecs/
 
