@@ -130,7 +130,7 @@ jobs:
         with:
           task-definition: MeSidecar-task-definition.json
           service: MESidecar
-          cluster: env.ClusterName
+          cluster: ${{ env.ClusterName }}
           wait-for-service-stability: true
           
 
