@@ -11,7 +11,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        
+
+      - name: Set Names
+        run: |
+          echo "ClusterName=AndreasMCluster" >> $GITHUB_ENV
+          echo "TaskDefinition=AndreasM-ME-Sidecar" >> $GITHUB_ENV
+
       - name: Set up AWS credentials
         run: |
           mkdir ~/.aws/
@@ -93,7 +98,8 @@ jobs:
       - name: Check if the cluster already exists
         id: ClusterExists
         run: |
-            echo "::set-output name=result::$(aws ecs list-clusters --region us-west-1 --query "contains(clusterArns,'arn:aws:ecs:us-west-1:633291361733:cluster/AndreasMCluster')")"
+#            echo "::set-output name=result::$(aws ecs list-clusters --region us-west-1 --query "contains(clusterArns,'arn:aws:ecs:us-west-1:633291361733:cluster/AndreasMCluster')")"
+            echo "::set-output name=result::$(aws ecs list-clusters --region us-west-1 --query "contains(clusterArns,'arn:aws:ecs:us-west-1:633291361733:cluster/$(env.ClusterName)')")"
 
 ### Wenn Cluster noch nicht existiert
       - name: aws ecs create-cluster
