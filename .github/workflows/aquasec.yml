@@ -22,7 +22,7 @@ jobs:
           aws_session_token     =   ${{ secrets.AWS_SESSION_TOKEN }}" > ~/.aws/credentials
 
 ### sa https://docs.aws.amazon.com/cli/latest/reference/ecs/
-
+#
 #     - name: Your AWS CLI Command
 #        run: aws s3 ls  # Replace with your actual AWS CLI command
 #        env:
