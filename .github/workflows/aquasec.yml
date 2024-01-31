@@ -12,11 +12,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # - name: Set Names
-        # run: |
-          # echo "ClusterName=AndreasMCluster" >> $GITHUB_ENV
-          # echo "TaskDefinition=AndreasM-ME-Sidecar" >> $GITHUB_ENV
-
       - name: Set up AWS credentials
         run: |
           mkdir ~/.aws/
@@ -25,23 +20,12 @@ jobs:
           aws_access_key_id     =   ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key =   ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_session_token     =   ${{ secrets.AWS_SESSION_TOKEN }}" > ~/.aws/credentials
-          
 
       - name: Set Names
         run: |
-          echo "ClusterName=AndreasMCluster" >> $GITHUB_ENV
-          echo "TaskDefinition=AndreasM-ME-Sidecar" >> $GITHUB_ENV
+          echo "ClusterName=AndreasMCluster3" >> $GITHUB_ENV
+          echo "TaskDefinition=AndreasM-ME-Sidecars" >> $GITHUB_ENV
       
-      # - name: Check if the cluster already exists
-        # id: ClusterExists
-        # run: |
-          # echo
-           # CLUSTER_NAME=$ClusterName
-           # CLUSTER_NAME=AndreasMCluster
-           # echo $CLUSTER_NAME
-           # aws ecs list-clusters --region us-west-1 --query "contains(clusterArns,'arn:aws:ecs:us-west-1:633291361733:cluster/${{ env.ClusterName }}')"
-          
-
 ### sa https://docs.aws.amazon.com/cli/latest/reference/ecs/
 
 #     - name: Your AWS CLI Command
@@ -63,56 +47,55 @@ jobs:
 ## aws ecs deregister-task-definition --region us-west-1 --task-definition arn:aws:ecs:us-west-1:633291361733:task-definition/AndreasM-ME-Sidecar:6
 #
 
-### App + ME images frisch runterladen und auf ECR hochladen
+## App + ME images frisch runterladen und auf ECR hochladen
 
-      # - name: output ECR password
-        # run: |
-            # echo "user: AWS"
-            # echo "password: $(aws ecr get-login-password --region us-west-1)"
+      - name: output ECR password
+        run: |
+            echo "user: AWS"
+            echo "password: $(aws ecr get-login-password --region us-west-1)"
         
-      # - name: Login to Amazon ECR
-        # id: login-ecr
-        # uses: aws-actions/amazon-ecr-login@v1
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
 
-      # - name: pull / push App Image to Amazon ECR
-        # id: app-image
-        # env:
-          # Image:            nginx
-          # Tag:              latest
-          # ECR_REPOSITORY:   andreasm
-          # ECR_REGISTRY:     ${{ steps.login-ecr.outputs.registry }}
-        # run: |
-          # docker pull $Image:$Tag
-          # docker tag $Image:$Tag $ECR_REGISTRY/$ECR_REPOSITORY:$Image
-          # docker push $ECR_REGISTRY/$ECR_REPOSITORY:$Image
-          # echo "app_image=$ECR_REGISTRY/$ECR_REPOSITORY:$Image" >> $GITHUB_OUTPUT
+      - name: pull / push App Image to Amazon ECR
+        id: app-image
+        env:
+          Image:            nginx
+          Tag:              latest
+          ECR_REPOSITORY:   andreasm
+          ECR_REGISTRY:     ${{ steps.login-ecr.outputs.registry }}
+        run: |
+          docker pull $Image:$Tag
+          docker tag $Image:$Tag $ECR_REGISTRY/$ECR_REPOSITORY:$Image
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$Image
+          echo "app_image=$ECR_REGISTRY/$ECR_REPOSITORY:$Image" >> $GITHUB_OUTPUT
 
-      # - name: Login to registry.aquasec.com
-        # id: login-registry-aquasec-com
-        # uses: docker/login-action@v3
-        # with:
-          # registry: registry.aquasec.com
-          # username: ${{ secrets.AQUA_USER }}
-          # password: ${{ secrets.AQUA_PASSWORD }}
+      - name: Login to registry.aquasec.com
+        id: login-registry-aquasec-com
+        uses: docker/login-action@v3
+        with:
+          registry: registry.aquasec.com
+          username: ${{ secrets.AQUA_USER }}
+          password: ${{ secrets.AQUA_PASSWORD }}
 
-      # - name: pull / push ME Sidecar Image to Amazon ECR
-        # id: me-image
-        # env:
-          # Registry:         registry.aquasec.com
-          # Image:            microenforcer-basic
-          # Tag:              2022.4
-          # ECR_REPOSITORY:   andreasm
-          # ECR_REGISTRY:     ${{ steps.login-ecr.outputs.registry }}
-          # AQUA_REGISTRY:    ${{ steps.login-registry-aquasec-com.outputs.registry }}
-        # run: |
-          # docker pull $Registry/$Image:$Tag
-          # docker tag $Registry/$Image:$Tag $ECR_REGISTRY/$ECR_REPOSITORY:$Image
-          # docker push $ECR_REGISTRY/$ECR_REPOSITORY:$Image
-          # echo "me_image=$ECR_REGISTRY/$ECR_REPOSITORY:$Image" >> $GITHUB_OUTPUT
+      - name: pull / push ME Sidecar Image to Amazon ECR
+        id: me-image
+        env:
+          Registry:         registry.aquasec.com
+          Image:            microenforcer-basic
+          Tag:              2022.4
+          ECR_REPOSITORY:   andreasm
+          ECR_REGISTRY:     ${{ steps.login-ecr.outputs.registry }}
+          AQUA_REGISTRY:    ${{ steps.login-registry-aquasec-com.outputs.registry }}
+        run: |
+          docker pull $Registry/$Image:$Tag
+          docker tag $Registry/$Image:$Tag $ECR_REGISTRY/$ECR_REPOSITORY:$Image
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$Image
+          echo "me_image=$ECR_REGISTRY/$ECR_REPOSITORY:$Image" >> $GITHUB_OUTPUT
           
       - name: Check if the cluster already exists
         id: ClusterExists
-#        run: echo "::set-output name=result::$(aws ecs list-clusters --region us-west-1 --query "contains(clusterArns,'arn:aws:ecs:us-west-1:633291361733:cluster/${{ env.ClusterName }}')")"
         run: echo "result=$(aws ecs list-clusters --region us-west-1 --query "contains(clusterArns,'arn:aws:ecs:us-west-1:633291361733:cluster/${{ env.ClusterName }}')")" >> $GITHUB_OUTPUT          
           
 
@@ -123,9 +106,6 @@ jobs:
           
 #      - name: run FARGATE task
 #        run: aws ecs run-task --cluster AndreasMCluster --task-definition AndreasMmeSidecar:21 --launch-type="FARGATE" --region us-west-1 --network-configuration '{"awsvpcConfiguration":{"assignPublicIp":"ENABLED","securityGroups":["sg-0b323ecaeb5d39379"],"subnets":["subnet-046ad0cd38c7e05cb","subnet-0b0db515a07b3a402","subnet-02081b7a023f2661f","subnet-070627f825b1ca7a5","subnet-09f04cf8eda5f7f00","subnet-0428c45315633c12f","subnet-0ed8ad693f0ac237e","subnet-0b774184c69364847"]}}'
-
-#      - name: register dummy task definition
-#        run: aws ecs register-task-definition --region us-west-1 --family AndreasM-ME-Sidecar --container-definitions "[{\"name\":\"sleep\",\"image\":\"busybox\",\"cpu\":256,\"command\":[\"sleep\",\"360\"],\"memory\":512,\"essential\":true}]" --requires-compatibilities "FARGATE" --network-mode "awsvpc" --cpu "256" --memory "512"
 
       - name: register task definition
         if: steps.ClusterExists.outputs.result == 'false'
