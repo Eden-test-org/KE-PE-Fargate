@@ -115,11 +115,11 @@ jobs:
 
       - name: register task definition
         if: steps.ClusterExists.outputs.result == 'false'
-        run: aws ecs register-task-definition --region us-west-1 --family AndreasM-ME-Sidecar --cli-input-json file://MeSidecar-task-definition.json --tags key="AndreasM",value="true"
+        run: aws ecs register-task-definition --region us-west-1 --family $TaskDefinition --cli-input-json file://MeSidecar-task-definition.json --tags key="AndreasM",value="true"
         
       - name: create service on cluster
         if: steps.ClusterExists.outputs.result == 'false'
-        run: aws ecs create-service --region us-west-1 --cluster AndreasMCluster --service-name MESidecar --task-definition AndreasM-ME-Sidecar --desired-count 1 --launch-type FARGATE --platform-version LATEST --network-configuration '{"awsvpcConfiguration":{"assignPublicIp":"ENABLED","securityGroups":["sg-0b323ecaeb5d39379"],"subnets":["subnet-046ad0cd38c7e05cb","subnet-0b0db515a07b3a402","subnet-02081b7a023f2661f","subnet-070627f825b1ca7a5","subnet-09f04cf8eda5f7f00","subnet-0428c45315633c12f","subnet-0ed8ad693f0ac237e","subnet-0b774184c69364847"]}}'
+        run: aws ecs create-service --region us-west-1 --cluster $ClusterName --service-name MESidecar --task-definition $TaskDefinition --desired-count 1 --launch-type FARGATE --platform-version LATEST --network-configuration '{"awsvpcConfiguration":{"assignPublicIp":"ENABLED","securityGroups":["sg-0b323ecaeb5d39379"],"subnets":["subnet-046ad0cd38c7e05cb","subnet-0b0db515a07b3a402","subnet-02081b7a023f2661f","subnet-070627f825b1ca7a5","subnet-09f04cf8eda5f7f00","subnet-0428c45315633c12f","subnet-0ed8ad693f0ac237e","subnet-0b774184c69364847"]}}'
 
   
 ### Wenn Cluster schon existiert, neue Task Definition aus Template anlegen und Task im existierenden Cluster und Service starten
@@ -131,7 +131,7 @@ jobs:
         with:
           task-definition: MeSidecar-task-definition.json
           service: MESidecar
-          cluster: AndreasMCluster
+          cluster: $ClusterName
           wait-for-service-stability: true
           
 
