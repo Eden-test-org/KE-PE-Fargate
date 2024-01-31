@@ -88,11 +88,12 @@ jobs:
         id: ClusterExists
         run: |
             echo "::set-output name=result::$(aws ecs list-clusters --region us-west-1 --query "contains(clusterArns,'arn:aws:ecs:us-west-1:633291361733:cluster/AndreasMCluster')")"
-            echo "ClusterExists=$(aws ecs list-clusters --region us-west-1 --query "contains(clusterArns,'arn:aws:ecs:us-west-1:633291361733:cluster/AndreasMCluster')")" >> $GITHUB_ENV
+            echo "SkipCosClusterExists=$(aws ecs list-clusters --region us-west-1 --query "contains(clusterArns,'arn:aws:ecs:us-west-1:633291361733:cluster/AndreasMCluster')")" >> $GITHUB_ENV
             
       - name: Use Environment Variable
+        if: echo "$SkipCosClusterExists"
         run: |
-          echo "Value of MY_VARIABLE: $ClusterExists"
+          echo "$SkipCosClusterExists"
   
 # ### Wenn Cluster schon existiert, neue Task Definition aus Template anlegen und Task im existierenden Cluster und Service starten
       # - name: Deploy Task to ECS (on existing cluster / service)
@@ -115,7 +116,6 @@ jobs:
 ### Wenn Cluster noch nicht existiert
 ### einfach einen Cluster anlegen und existierende Task Definition als FARGATE starten          
       - name: aws ecs create-cluster
-        if: steps.ClusterExists.outputs.result == 'false'
         run: aws ecs create-cluster --cluster-name AndreasMCluster --region us-west-1 --capacity-providers FARGATE 
           
 #      - name: run FARGATE task
