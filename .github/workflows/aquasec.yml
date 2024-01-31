@@ -12,10 +12,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set Names
-        run: |
-          echo "ClusterName=AndreasMCluster" >> $GITHUB_ENV
-          echo "TaskDefinition=AndreasM-ME-Sidecar" >> $GITHUB_ENV
+      # - name: Set Names
+        # run: |
+          # echo "ClusterName=AndreasMCluster" >> $GITHUB_ENV
+          # echo "TaskDefinition=AndreasM-ME-Sidecar" >> $GITHUB_ENV
 
       - name: Set up AWS credentials
         run: |
@@ -25,6 +25,19 @@ jobs:
           aws_access_key_id     =   ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key =   ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_session_token     =   ${{ secrets.AWS_SESSION_TOKEN }}" > ~/.aws/credentials
+          
+
+    - name: Set Names
+      run: |
+        echo "ClusterName=AndreasMCluster" >> $GITHUB_ENV
+        echo "TaskDefinition=AndreasM-ME-Sidecar" >> $GITHUB_ENV
+
+    - name: Check if the cluster already exists
+      id: ClusterExists
+      run: |
+        CLUSTER_NAME=$ClusterName
+        echo "::set-output name=result::$(aws ecs list-clusters --region us-west-1 --query \"contains(clusterArns,'arn:aws:ecs:us-west-1:633291361733:cluster/$CLUSTER_NAME')\")"          
+          
 
 ### sa https://docs.aws.amazon.com/cli/latest/reference/ecs/
 
@@ -92,14 +105,15 @@ jobs:
           # docker pull $Registry/$Image:$Tag
           # docker tag $Registry/$Image:$Tag $ECR_REGISTRY/$ECR_REPOSITORY:$Image
           # docker push $ECR_REGISTRY/$ECR_REPOSITORY:$Image
-          # echo "me_image=$ECR_REGISTRY/$ECR_REPOSITORY:$Image" >> $GITHUB_OUTPUT          
-      - name: Check if the cluster already exists
-        id: ClusterExists
-        run: |
-#          echo "::set-output name=result::$(aws ecs list-clusters --region us-west-1 --query "contains(clusterArns,'arn:aws:ecs:us-west-1:633291361733:cluster/AndreasMCluster')")"
-#          echo "::set-output name=result::$(aws ecs list-clusters --region us-west-1 --query "contains(clusterArns,'arn:aws:ecs:us-west-1:633291361733:cluster/${{ env.ClusterName }}')")"
-          CLUSTER_NAME=$ClusterName
-          echo "::set-output name=result::$(aws ecs list-clusters --region us-west-1 --query \"contains(clusterArns,'arn:aws:ecs:us-west-1:633291361733:cluster/$CLUSTER_NAME')\")"          
+          # echo "me_image=$ECR_REGISTRY/$ECR_REPOSITORY:$Image" >> $GITHUB_OUTPUT
+          
+      # - name: Check if the cluster already exists
+        # id: ClusterExists
+        # run: |
+# #          echo "::set-output name=result::$(aws ecs list-clusters --region us-west-1 --query "contains(clusterArns,'arn:aws:ecs:us-west-1:633291361733:cluster/AndreasMCluster')")"
+# #          echo "::set-output name=result::$(aws ecs list-clusters --region us-west-1 --query "contains(clusterArns,'arn:aws:ecs:us-west-1:633291361733:cluster/${{ env.ClusterName }}')")"
+          # CLUSTER_NAME=$ClusterName
+          # echo "::set-output name=result::$(aws ecs list-clusters --region us-west-1 --query \"contains(clusterArns,'arn:aws:ecs:us-west-1:633291361733:cluster/$CLUSTER_NAME')\")"          
           
 
 ### Wenn Cluster noch nicht existiert
