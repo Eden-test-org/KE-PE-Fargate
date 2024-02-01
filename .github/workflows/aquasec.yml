@@ -49,12 +49,6 @@ jobs:
 #
 
 ## App + ME images frisch runterladen und auf ECR hochladen
-
-      - name: output ECR password
-        run: |
-            echo "user: AWS"
-            echo "password: $(aws ecr get-login-password --region us-west-1)"
-        
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
@@ -98,8 +92,17 @@ jobs:
       - name: Check if the cluster already exists
         id: ClusterExists
         run: echo "result=$(aws ecs list-clusters --region us-west-1 --query "contains(clusterArns,'arn:aws:ecs:us-west-1:633291361733:cluster/${{ env.ClusterName }}')")" >> $GITHUB_OUTPUT          
-          
-
+        
+      - name: Utilities
+        run: |
+            echo ECR password:
+            echo "user: AWS"
+            echo "password: $(aws ecr get-login-password --region us-west-1)"
+            echo
+            echo optional AQUA_IMAGE_ID:
+            echo "$(docker image inspect --format {{.Id}} ${{ steps.app-image.outputs.app_image }})"
+            
+        
 ### Wenn Cluster noch nicht existiert
       - name: aws ecs create-cluster
         if: steps.ClusterExists.outputs.result == 'false'
