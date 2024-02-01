@@ -103,7 +103,7 @@ jobs:
         run: echo "result=$(aws ecs list-clusters --region us-west-1 --query "contains(clusterArns,'arn:aws:ecs:us-west-1:633291361733:cluster/${{ env.ClusterName }}')")" >> $GITHUB_OUTPUT          
      
        
-### Wenn Cluster noch nicht existiert
+### Wenn Cluster noch nicht existiert 
       - name: aws ecs create-cluster
         if: steps.ClusterExists.outputs.result == 'false'
         run: aws ecs create-cluster --cluster-name $ClusterName --region us-west-1 --capacity-providers FARGATE 
