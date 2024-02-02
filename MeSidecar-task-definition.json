@@ -53,7 +53,7 @@
                 },
                 {
                     "name": "AQUA_IMAGE_ID",
-                    "value": "sha256:b690f5f0a2d535cee5e08631aa508fef339c43bb91d5b1f7d77a1a05cea021a8"
+                    "value": "sha256:b690f5f0a2d535cee5e08631aa508fef339c43bb91d5b1f7d77a1a05cea021ab"
                 },
                 {
                     "name": "LD_PRELOAD",
