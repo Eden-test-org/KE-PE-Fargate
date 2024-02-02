@@ -52,7 +52,7 @@
                     "value": "1"
                 },
                 {
-                    "name": "AQUA_IMAGE_ID",
+                    "name": "AQUA_IMAGE_ID_OLD",
                     "value": "sha256:b690f5f0a2d535cee5e08631aa508fef339c43bb91d5b1f7d77a1a05cea021ab"
                 },
                 {
@@ -69,7 +69,7 @@
                 },
                 {
                     "name": "no_proxy",
-                    "value": "169.254.170.2,169.254.169.254,.internal"
+                    "value": ""
                 },
                 {
                     "name": "AQUA_SERVER",
