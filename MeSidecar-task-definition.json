@@ -69,7 +69,7 @@
                 },
                 {
                     "name": "no_proxy",
-                    "value": ""
+                    "value": "169.254.170.2,169.254.169.254"
                 },
                 {
                     "name": "AQUA_SERVER",
