@@ -37,7 +37,7 @@
             "environment": [
                 {
                     "name": "AQUA_TOKEN",
-                    "value": "7263f99d-a565-4ce2-a9ba-939cd72b7498"
+                    "value": "edc5deb6-828c-4cc9-82b0-8621212a697f"
                 },
                 {
                     "name": "AQUA_DEBUG_LEVEL",
@@ -73,7 +73,7 @@
                 },
                 {
                     "name": "AQUA_SERVER",
-                    "value": "20.113.23.219:8443"
+                    "value": "c1fae5dbe2-gw.cloud.aquasec.com:443"
                 }
             ],
             "environmentFiles": [],
