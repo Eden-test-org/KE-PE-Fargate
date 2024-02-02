@@ -52,8 +52,8 @@
                     "value": "1"
                 },
                 {
-                    "name": "AQUA_IMAGE_ID_OLD",
-                    "value": "sha256:b690f5f0a2d535cee5e08631aa508fef339c43bb91d5b1f7d77a1a05cea021ab"
+                    "name": "AQUA_IMAGE_ID",
+                    "value": "sha256:ade5731066a651670376c5ed78f605735f29b97bbcc4e4cfd59d7d6fbb2253f0"
                 },
                 {
                     "name": "LD_PRELOAD",
@@ -69,7 +69,7 @@
                 },
                 {
                     "name": "no_proxy",
-                    "value": "169.254.170.2,169.254.169.254"
+                    "value": "169.254.170.2,169.254.169.254,.internal"
                 },
                 {
                     "name": "AQUA_SERVER",
