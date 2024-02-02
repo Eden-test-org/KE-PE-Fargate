@@ -52,7 +52,7 @@
                     "value": "1"
                 },
                 {
-                    "name": "AQUA_IMAGE_ID",
+                    "name": "AQUA_IMAGE_ID_OLD",
                     "value": "sha256:ade5731066a651670376c5ed78f605735f29b97bbcc4e4cfd59d7d6fbb2253f0"
                 },
                 {
