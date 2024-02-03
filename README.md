@@ -1,4 +1,4 @@
-# Deploy ECS Cluster and ME as Sidecar for NginX on Fargatee<br> 
+# Deploy ECS Cluster and ME as Sidecar for NginX on Fargate<br> 
 
 Get AWS Access Keys from<br> 
 https://d-9067a32c00.awsapps.com/start#/<br> 
