@@ -89,20 +89,20 @@ jobs:
         username: ${{ secrets.AQUA_USER }}
         password: ${{ secrets.AQUA_PASSWORD }}
 
-    # - name: pull / push ME Sidecar Image to Amazon ECR
-      # id: me-image
-      # env:
-        # Registry:         registry.aquasec.com
-        # Image:            microenforcer-basic
-        # Tag:              2022.4
-        # ECR_REPOSITORY:   andreasm
-        # ECR_REGISTRY:     ${{ steps.login-ecr.outputs.registry }}
-        # AQUA_REGISTRY:    ${{ steps.login-registry-aquasec-com.outputs.registry }}
-      # run: |
-        # docker pull $Registry/$Image:$Tag
-        # docker tag $Registry/$Image:$Tag $ECR_REGISTRY/$ECR_REPOSITORY:$Image
-        # docker push $ECR_REGISTRY/$ECR_REPOSITORY:$Image
-        # echo "me_image=$ECR_REGISTRY/$ECR_REPOSITORY:$Image" >> $GITHUB_OUTPUT
+    - name: pull / push ME Sidecar Image to Amazon ECR
+      id: me-image
+      env:
+        Registry:         registry.aquasec.com
+        Image:            microenforcer-basic
+        Tag:              2022.4
+        ECR_REPOSITORY:   andreasm
+        ECR_REGISTRY:     ${{ steps.login-ecr.outputs.registry }}
+        AQUA_REGISTRY:    ${{ steps.login-registry-aquasec-com.outputs.registry }}
+      run: |
+        docker pull $Registry/$Image:$Tag
+        docker tag $Registry/$Image:$Tag $ECR_REGISTRY/$ECR_REPOSITORY:$Image
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$Image
+        echo "me_image=$ECR_REGISTRY/$ECR_REPOSITORY:$Image" >> $GITHUB_OUTPUT
         
     # - name: Utilities
       # run: |
