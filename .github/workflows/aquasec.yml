@@ -73,7 +73,7 @@ jobs:
       env:
         Image:            nginx
         Tag:              latest
-        ECR_REPOSITORY:   andreasm
+        ECR_REPOSITORY:   ${{ env.ECR_REPOSITORY }}
         ECR_REGISTRY:     ${{ steps.login-ecr.outputs.registry }}
       run: |
         docker pull $Image:$Tag
@@ -95,7 +95,7 @@ jobs:
         Registry:         registry.aquasec.com
         Image:            microenforcer-basic
         Tag:              2022.4
-        ECR_REPOSITORY:   andreasm
+        ECR_REPOSITORY:   ${{ env.ECR_REPOSITORY }}
         ECR_REGISTRY:     ${{ steps.login-ecr.outputs.registry }}
         AQUA_REGISTRY:    ${{ steps.login-registry-aquasec-com.outputs.registry }}
       run: |
