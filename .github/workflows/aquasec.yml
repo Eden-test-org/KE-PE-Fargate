@@ -68,19 +68,19 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
 
-    # - name: pull / push App Image to Amazon ECR
-      # id: app-image
-      # env:
-        # Image:            nginx
-        # Tag:              latest
-        # ECR_REPOSITORY:   andreasm
-        # ECR_REGISTRY:     ${{ steps.login-ecr.outputs.registry }}
-      # run: |
-        # docker pull $Image:$Tag
-        # docker tag $Image:$Tag $ECR_REGISTRY/$ECR_REPOSITORY:$Image
-        # docker push $ECR_REGISTRY/$ECR_REPOSITORY:$Image
-        # echo "app_image=$ECR_REGISTRY/$ECR_REPOSITORY:$Image" >> $GITHUB_OUTPUT
-# #
+    - name: pull / push App Image to Amazon ECR
+      id: app-image
+      env:
+        Image:            nginx
+        Tag:              latest
+        ECR_REPOSITORY:   andreasm
+        ECR_REGISTRY:     ${{ steps.login-ecr.outputs.registry }}
+      run: |
+        docker pull $Image:$Tag
+        docker tag $Image:$Tag $ECR_REGISTRY/$ECR_REPOSITORY:$Image
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$Image
+        echo "app_image=$ECR_REGISTRY/$ECR_REPOSITORY:$Image" >> $GITHUB_OUTPUT
+#
     # - name: Login to registry.aquasec.com
       # id: login-registry-aquasec-com
       # uses: docker/login-action@v3
