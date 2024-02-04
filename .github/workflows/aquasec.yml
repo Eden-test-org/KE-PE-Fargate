@@ -96,7 +96,7 @@ jobs:
           echo optional AQUA_IMAGE_ID:
           echo "$(docker image inspect --format {{.Id}} ${{ steps.app-image.outputs.app_image }})"
           
-    - name: Check if the cluster already exists
+    - name: Check if the cluster already exists  ##assuming the service also exists without checking
       id: ClusterExists
       run: echo "result=$(aws ecs list-clusters --region us-west-1 --query "contains(clusterArns,'arn:aws:ecs:us-west-1:633291361733:cluster/${{ env.ECS_CLUSTER }}')")" >> $GITHUB_OUTPUT          
    
