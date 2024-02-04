@@ -104,18 +104,18 @@ jobs:
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$Image
         echo "me_image=$ECR_REGISTRY/$ECR_REPOSITORY:$Image" >> $GITHUB_OUTPUT
         
-    # - name: Utilities
-      # run: |
-          # echo ECR password:
-          # echo "user: AWS"
-          # echo "password: $(aws ecr get-login-password --region us-west-1)"
-          # echo
-          # echo optional AQUA_IMAGE_ID:
-          # echo "$(docker image inspect --format {{.Id}} ${{ steps.app-image.outputs.app_image }})"
+    - name: Utilities
+      run: |
+          echo ECR password:
+          echo "user: AWS"
+          echo "password: $(aws ecr get-login-password --region us-west-1)"
+          echo
+          echo optional AQUA_IMAGE_ID:
+          echo "$(docker image inspect --format {{.Id}} ${{ steps.app-image.outputs.app_image }})"
           
-    # - name: Check if the cluster already exists
-      # id: ClusterExists
-      # run: echo "result=$(aws ecs list-clusters --region us-west-1 --query "contains(clusterArns,'arn:aws:ecs:us-west-1:633291361733:cluster/${{ env.ClusterName }}')")" >> $GITHUB_OUTPUT          
+    - name: Check if the cluster already exists
+      id: ClusterExists
+      run: echo "result=$(aws ecs list-clusters --region us-west-1 --query "contains(clusterArns,'arn:aws:ecs:us-west-1:633291361733:cluster/${{ env.ClusterName }}')")" >> $GITHUB_OUTPUT          
    
      
 # ### Wenn Cluster noch nicht existiert 
