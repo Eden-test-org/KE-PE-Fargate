@@ -14,7 +14,7 @@ env:
                                                # containerDefinitions section of your task definition
 jobs:
   deploy:
-    name: Deploy ME Sidecar on Fargate
+    name: Deploy-ME-Sidecar-on-Fargate
     runs-on: ubuntu-latest
     environment: production
 
