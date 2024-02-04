@@ -33,20 +33,6 @@ jobs:
         aws-region: ${{ env.AWS_REGION }}
 
 
-# ### Set here your desired cluster name and name of your task definition family
-      # - name: Set Names
-        # run: |
-          # echo "ClusterName=AndreasMCluster" >> $GITHUB_ENV
-          # echo "TaskDefinition=AndreasM-ME-Sidecar" >> $GITHUB_ENV
-      
-### sa https://docs.aws.amazon.com/cli/latest/reference/ecs/
-
-#     - name: Your AWS CLI Command
-#        run: aws s3 ls  # Replace with your actual AWS CLI command
-#        env:
-#          AWS_REGION: us-west-1  # Specify your AWS region here
-
-        
 ## für aws cli output in bash (sa https://docs.aws.amazon.com/cli/latest/userguide/cli-usage-pagination.html#cli-usage-pagination-clientside)
 ## default ist: export AWS_PAGER="less" - zum deaktivieren: export AWS_PAGER="" - oder aws ... --no-cli-pager
 ## aws ecs stop-task --cluster AndreasMCluster --region us-west-1 --task b60c0efe4d914af197bc2b0268780ca4
@@ -125,11 +111,11 @@ jobs:
 
     - name: register task definition
       if: steps.ClusterExists.outputs.result == 'false'
-      run: aws ecs register-task-definition --region ${{ env.AWS_REGION }} --family $TaskDefinition --cli-input-json file://MeSidecar-task-definition.json --tags key="AndreasM",value="true"
+      run: aws ecs register-task-definition --region ${{ env.AWS_REGION }} --family ${{ env.ECS_TASK_DEFINITION }}--cli-input-json file://MeSidecar-task-definition.json --tags key="AndreasM",value="true"
      
-    - name: create service on cluster
+    - name: create service on cluster # using predefined Aqua Subnets
       if: steps.ClusterExists.outputs.result == 'false'
-      run: aws ecs create-service --region ${{ env.AWS_REGION }} --cluster ${{ env.ECS_CLUSTER }} --service-name ${{ env.ECS_SERVICE }} --task-definition $TaskDefinition --desired-count 1 --launch-type FARGATE --platform-version LATEST --network-configuration '{"awsvpcConfiguration":{"assignPublicIp":"ENABLED","securityGroups":["sg-0b323ecaeb5d39379"],"subnets":["subnet-046ad0cd38c7e05cb","subnet-0b0db515a07b3a402","subnet-02081b7a023f2661f","subnet-070627f825b1ca7a5","subnet-09f04cf8eda5f7f00","subnet-0428c45315633c12f","subnet-0ed8ad693f0ac237e","subnet-0b774184c69364847"]}}'
+      run: aws ecs create-service --region ${{ env.AWS_REGION }} --cluster ${{ env.ECS_CLUSTER }} --service-name ${{ env.ECS_SERVICE }} --task-definition ${{ env.ECS_TASK_DEFINITION }} --desired-count 1 --launch-type FARGATE --platform-version LATEST --network-configuration '{"awsvpcConfiguration":{"assignPublicIp":"ENABLED","securityGroups":["sg-0b323ecaeb5d39379"],"subnets":["subnet-046ad0cd38c7e05cb","subnet-0b0db515a07b3a402","subnet-02081b7a023f2661f","subnet-070627f825b1ca7a5","subnet-09f04cf8eda5f7f00","subnet-0428c45315633c12f","subnet-0ed8ad693f0ac237e","subnet-0b774184c69364847"]}}'
 
   
 ### Wenn Cluster schon existiert, neue Task Definition aus Template anlegen und Task im existierenden Cluster und Service starten
