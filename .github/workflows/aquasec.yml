@@ -111,7 +111,7 @@ jobs:
 
     - name: register task definition
       if: steps.ClusterExists.outputs.result == 'false'
-      run: aws ecs register-task-definition --region ${{ env.AWS_REGION }} --family ${{ env.ECS_TASK_DEFINITION }}--cli-input-json file://MeSidecar-task-definition.json --tags key="AndreasM",value="true"
+      run: aws ecs register-task-definition --region ${{ env.AWS_REGION }} --family ${{ env.ECS_TASK_DEFINITION }} --cli-input-json file://MeSidecar-task-definition.json --tags key="AndreasM",value="true"
      
     - name: create service on cluster # using predefined Aqua Subnets
       if: steps.ClusterExists.outputs.result == 'false'
