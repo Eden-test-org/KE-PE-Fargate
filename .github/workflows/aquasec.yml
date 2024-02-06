@@ -57,7 +57,10 @@ jobs:
             helm repo add aqua-helm https://helm.aquasec.com
             helm repo update
             helm search repo aqua-helm
-            # helm upgrade --install --namespace aqua kube-enforcer aqua-helm/kube-enforcer --version 2022.4 -f ./kube-enforcer-values.yaml --create-namespace
+            ## helm upgrade --install --namespace aqua kube-enforcer aqua-helm/kube-enforcer --version 2022.4 -f ./kube-enforcer-values.yaml --create-namespace
+            ## In Fargate the fargate-profile needs to be created first. Once this is created, the namespace can be created, and everything works.
+            ## sa https://stackoverflow.com/questions/73949730/eks-pod-in-workspace-getting-default-scheduler-for-fargate
+            ## noch keine Ahnung, wie das geht - irgendwie https://docs.aws.amazon.com/eks/latest/userguide/fargate-profile.html#create-fargate-profile
             helm upgrade --install --namespace default kube-enforcer aqua-helm/kube-enforcer --version 2022.4 -f ./kube-enforcer-values.yaml
 
 
