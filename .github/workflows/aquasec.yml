@@ -32,9 +32,11 @@ jobs:
         aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
         aws-region: ${{ env.AWS_REGION }}
 
-    - name: test
-      run: eksctl version
-
+    - name: installing eksctl
+      run:  |
+            curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+            sudo mv /tmp/eksctl /usr/local/bin
+            eksctl version
 
 # ## für aws cli output in bash (sa https://docs.aws.amazon.com/cli/latest/userguide/cli-usage-pagination.html#cli-usage-pagination-clientside)
 # ## default ist: export AWS_PAGER="less" - zum deaktivieren: export AWS_PAGER="" - oder aws ... --no-cli-pager
