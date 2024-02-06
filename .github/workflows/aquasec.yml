@@ -51,6 +51,13 @@ jobs:
             kubectl version --client=true -o json | jq '.clientVersion.gitVersion' -r 
             kubectl get nodes -o wide
             kubectl get pods -A -o wide
+            
+    - name: helm
+      run:  |
+            helm repo add aqua-helm https://helm.aquasec.com
+            helm repo update
+            helm search repo aqua-helm
+
 
             
 
