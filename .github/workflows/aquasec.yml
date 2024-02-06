@@ -45,14 +45,11 @@ jobs:
             # --name ${{ env.EKS_CLUSTER }} \ 
             # --region ${{ env.AWS_REGION }}  ###/home/runner/work/_temp/05673ba0-5ba0-4f35-befd-e022bfe6a367.sh: line 4: --region: command not found ???
 
-
-
-
     - name: kubectl
       run:  |
             aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.EKS_CLUSTER }}
             kubectl version --client=true -o json | jq '.clientVersion.gitVersion' -r 
-            kubectl get nodes -o wide \
+            kubectl get nodes -o wide
             kubectl get pods -A -o wide
 
             
