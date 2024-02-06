@@ -65,7 +65,7 @@ jobs:
 
 
             
-
+# ## eksctl delete cluster --name AndreasMCluster us-west-1
 
 
 
