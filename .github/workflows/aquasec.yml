@@ -45,9 +45,6 @@ jobs:
             --name ${{ env.EKS_CLUSTER }} \ 
             --region ${{ env.AWS_REGION }}
 
-
-eksctl create cluster --name my-cluster --region region-code 
-
     # - name: create a cluster using the eksctl ... importing the local rsa key for ssh access
       # run:  |
             # eksctl create cluster \
