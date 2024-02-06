@@ -47,9 +47,10 @@ jobs:
 
     - name: kubectl
       run:  |
-            kubectl version --client=true -o json | jq '.clientVersion.gitVersion' -r \
-            kubectl get nodes -o wide \
-            kubectl get pods -A -o wide
+            kubectl version --client=true -o json | jq '.clientVersion.gitVersion' -r 
+            # \
+            # kubectl get nodes -o wide \
+            # kubectl get pods -A -o wide
 
             
 
