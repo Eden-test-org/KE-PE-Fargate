@@ -8,7 +8,7 @@ env:
   AWS_REGION: us-west-1                   
   ECR_REPOSITORY: andreasm                
   ECS_SERVICE: MESidecar                  
-  ECS_CLUSTER: AndreasMCluster            
+  EKS_CLUSTER: AndreasMCluster            
   ECS_TASK_DEFINITION: AndreasM-ME-Sidecar
 
 permissions:
@@ -38,12 +38,22 @@ jobs:
             sudo mv /tmp/eksctl /usr/local/bin
             eksctl version
 
-    - name: create a cluster using the eksctl ... importing the local rsa key for ssh access
+    - name: create an EKS cluster on Fargate using the eksctl
       run:  |
             eksctl create cluster \
-            --name andreasm --version 1.24 \ 
-            --region ${{ env.AWS_REGION }} \
-            --nodegroup-name standard-workers --node-type t3.small --nodes 1 --nodes-min 1 --nodes-max 4 --managed --ssh-access --ssh-public-key=~/.ssh/id_rsa.pub"
+            --version 1.27 --fargate \
+            --name ${{ env.EKS_CLUSTER }} \ 
+            --region ${{ env.AWS_REGION }}
+
+
+eksctl create cluster --name my-cluster --region region-code 
+
+    # - name: create a cluster using the eksctl ... importing the local rsa key for ssh access
+      # run:  |
+            # eksctl create cluster \
+            # --name ${{ env.EKS_CLUSTER }} --version 1.27 \ 
+            # --region ${{ env.AWS_REGION }} \
+            # --nodegroup-name standard-workers --node-type t3.small --nodes 1 --nodes-min 1 --nodes-max 4 --managed --ssh-access --ssh-public-key=~/.ssh/id_rsa.pub
 
             
     # - name: create a Fargate profile with eksctl            
