@@ -32,34 +32,25 @@ jobs:
         aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
         aws-region: ${{ env.AWS_REGION }}
 
-    - name: installing eksctl
-      run:  |
-            curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
-            sudo mv /tmp/eksctl /usr/local/bin
-            eksctl version
+    # - name: installing eksctl
+      # run:  |
+            # curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+            # sudo mv /tmp/eksctl /usr/local/bin
+            # eksctl version
 
-    - name: create an EKS cluster on Fargate using the eksctl
-      run:  |
-            eksctl create cluster \
-            --version 1.27 --fargate \
-            --name ${{ env.EKS_CLUSTER }} \ 
-            --region ${{ env.AWS_REGION }}
-
-    # - name: create a cluster using the eksctl ... importing the local rsa key for ssh access
+    # - name: create an EKS cluster on Fargate using the eksctl
       # run:  |
             # eksctl create cluster \
-            # --name ${{ env.EKS_CLUSTER }} --version 1.27 \ 
-            # --region ${{ env.AWS_REGION }} \
-            # --nodegroup-name standard-workers --node-type t3.small --nodes 1 --nodes-min 1 --nodes-max 4 --managed --ssh-access --ssh-public-key=~/.ssh/id_rsa.pub
+            # --version 1.27 --fargate \
+            # --name ${{ env.EKS_CLUSTER }} \ 
+            # --region ${{ env.AWS_REGION }}
 
-            
-    # - name: create a Fargate profile with eksctl            
-      # run:  |
-            # eksctl create fargateprofile \
-            # --cluster my-cluster \
-            # --name my-fargate-profile \
-            # --namespace my-kubernetes-namespace \
-            # --labels key=value
+    - name: kubectl
+      run:  |
+            kubectl version --client=true -o json | jq '.clientVersion.gitVersion' -r
+
+
+
 
 # ## für aws cli output in bash (sa https://docs.aws.amazon.com/cli/latest/userguide/cli-usage-pagination.html#cli-usage-pagination-clientside)
 # ## default ist: export AWS_PAGER="less" - zum deaktivieren: export AWS_PAGER="" - oder aws ... --no-cli-pager
