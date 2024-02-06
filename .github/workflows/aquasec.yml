@@ -37,14 +37,22 @@ jobs:
             curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
             sudo mv /tmp/eksctl /usr/local/bin
             eksctl version
-            
-    - name: create a Fargate profile with eksctl            
+
+    - name: create a cluster using the eksctl ... importing the local rsa key for ssh access
       run:  |
-            eksctl create fargateprofile \
-            --cluster my-cluster \
-            --name my-fargate-profile \
-            --namespace my-kubernetes-namespace \
-            --labels key=value
+            eksctl create cluster \
+            --name andreasm --version 1.24 \ 
+            --region ${{ env.AWS_REGION }} \
+            --nodegroup-name standard-workers --node-type t3.small --nodes 1 --nodes-min 1 --nodes-max 4 --managed --ssh-access --ssh-public-key=~/.ssh/id_rsa.pub"
+
+            
+    # - name: create a Fargate profile with eksctl            
+      # run:  |
+            # eksctl create fargateprofile \
+            # --cluster my-cluster \
+            # --name my-fargate-profile \
+            # --namespace my-kubernetes-namespace \
+            # --labels key=value
 
 # ## für aws cli output in bash (sa https://docs.aws.amazon.com/cli/latest/userguide/cli-usage-pagination.html#cli-usage-pagination-clientside)
 # ## default ist: export AWS_PAGER="less" - zum deaktivieren: export AWS_PAGER="" - oder aws ... --no-cli-pager
