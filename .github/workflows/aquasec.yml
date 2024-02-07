@@ -63,7 +63,7 @@ jobs:
     - name: create namespace for Aqua with fargateprofile   
       if: steps.ClusterExists.outputs.result == 'true'
       run:  |
-            kubectl create ns ${{ env.NAMESPACE }}
+            # kubectl create ns ${{ env.NAMESPACE }}
             eksctl create fargateprofile \
                 --cluster ${{ env.EKS_CLUSTER }} \
                 --name aqua-fargate-profile \
