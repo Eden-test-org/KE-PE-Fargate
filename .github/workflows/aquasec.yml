@@ -62,17 +62,17 @@ jobs:
             kubectl get nodes -o wide
             kubectl get pods -A -o wide
 
-### In Fargate the fargate-profile needs to be created first. Once this is created, the namespace can be created, and everything works.
-    - name: create namespace for Aqua with fargate profile   
-      if: steps.ClusterExists2.outputs.result == 'true'
-      run:  |
-            eksctl create fargateprofile \
-                --region ${{ env.AWS_REGION }} \
-                --cluster ${{ env.EKS_CLUSTER }} \
-                --name aqua-fargate-profile \
-                --namespace ${{ env.NAMESPACE }}
+# ### In Fargate the fargate-profile needs to be created first. Once this is created, the namespace can be created, and everything works.
+    # - name: create namespace for Aqua with fargate profile   
+      # if: steps.ClusterExists2.outputs.result == 'true'
+      # run:  |
+            # eksctl create fargateprofile \
+                # --region ${{ env.AWS_REGION }} \
+                # --cluster ${{ env.EKS_CLUSTER }} \
+                # --name aqua-fargate-profile \
+                # --namespace ${{ env.NAMESPACE }}
 
-            kubectl create ns ${{ env.NAMESPACE }}
+            # kubectl create ns ${{ env.NAMESPACE }}
 
     - name: deploy Aqua with helm
       if: steps.ClusterExists2.outputs.result == 'true'
@@ -80,9 +80,7 @@ jobs:
             helm repo add aqua-helm https://helm.aquasec.com
             helm repo update
             helm search repo aqua-helm
-            helm upgrade --install --namespace ${{ env.NAMESPACE }} kube-enforcer aqua-helm/kube-enforcer --version 2022.4 -f ./kube-enforcer-values.yaml --set \
-                imageCredentials.username=${{ env.AQUA_USER }},\
-                imageCredentials.password=${{ env.AQUA_PASSWORD }}
+            helm upgrade --install --namespace ${{ env.NAMESPACE }} kube-enforcer aqua-helm/kube-enforcer --version 2022.4 -f ./kube-enforcer-values.yaml --set imageCredentials.username=${{ env.AQUA_USER }},imageCredentials.password=${{ env.AQUA_PASSWORD }}
             
     - name: deploy some workload   
       if: steps.ClusterExists2.outputs.result == 'true'
