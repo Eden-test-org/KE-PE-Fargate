@@ -51,11 +51,11 @@ jobs:
             --fargate --version 1.27
 
     - name: Check if the cluster exists
-      id: ClusterExists
+      id: ClusterExists2
       run: echo "result=$(aws ecs list-clusters --region ${{ env.AWS_REGION }} --query "contains(clusterArns,'arn:aws:ecs:${{ env.AWS_REGION }}:633291361733:cluster/${{ env.EKS_CLUSTER }}')")" >> $GITHUB_OUTPUT          
      
     - name: configure kubectl
-      if: steps.ClusterExists.outputs.result == 'true'
+      if: steps.ClusterExists2.outputs.result == 'true'
       run:  |
             aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.EKS_CLUSTER }}
             kubectl version --client=true -o json | jq '.clientVersion.gitVersion' -r 
@@ -64,7 +64,7 @@ jobs:
 
 ### In Fargate the fargate-profile needs to be created first. Once this is created, the namespace can be created, and everything works.
     - name: create namespace for Aqua with fargate profile   
-      if: steps.ClusterExists.outputs.result == 'true'
+      if: steps.ClusterExists2.outputs.result == 'true'
       run:  |
             eksctl create fargateprofile \
                 --region ${{ env.AWS_REGION }} \
@@ -75,7 +75,7 @@ jobs:
             kubectl create ns ${{ env.NAMESPACE }}
 
     - name: deploy Aqua with helm
-      if: steps.ClusterExists.outputs.result == 'true'
+      if: steps.ClusterExists2.outputs.result == 'true'
       run:  |
             helm repo add aqua-helm https://helm.aquasec.com
             helm repo update
@@ -85,7 +85,7 @@ jobs:
                 imageCredentials.password=${{ env.AQUA_PASSWORD }}
             
     - name: deploy some workload   
-      if: steps.ClusterExists.outputs.result == 'true'
+      if: steps.ClusterExists2.outputs.result == 'true'
       run:  |
             kubectl create deployment netshoot --image=nicolaka/netshoot -- "/bin/sleep" "infinity"
 
