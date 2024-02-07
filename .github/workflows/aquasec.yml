@@ -6,10 +6,10 @@ on:
 
 env:
   AWS_REGION: us-west-1                   
-  ECR_REPOSITORY: andreasm                
-  ECS_SERVICE: MESidecar                  
-  EKS_CLUSTER: AndreasMCluster            
-  ECS_TASK_DEFINITION: AndreasM-ME-Sidecar
+  EKS_CLUSTER: AndreasMCluster2
+  # ECR_REPOSITORY: andreasm                
+  # ECS_SERVICE: MESidecar                  
+  # ECS_TASK_DEFINITION: AndreasM-ME-Sidecar
 
 permissions:
   contents: read
@@ -41,9 +41,11 @@ jobs:
     - name: create an EKS cluster on Fargate using the eksctl
       run:  |
             eksctl create cluster \
-            --version 1.27 --fargate \
-            --name ${{ env.EKS_CLUSTER }} \ 
-            --region ${{ env.AWS_REGION }}  ###/home/runner/work/_temp/05673ba0-5ba0-4f35-befd-e022bfe6a367.sh: line 4: --region: command not found ???
+            --name ${{ env.EKS_CLUSTER }} \
+            --region ${{ env.AWS_REGION }} \
+            --fargate --version 1.27
+
+            # --region ${{ env.AWS_REGION }}  ###/home/runner/work/_temp/05673ba0-5ba0-4f35-befd-e022bfe6a367.sh: line 4: --region: command not found ???
 
     - name: kubectl
       run:  |
@@ -62,6 +64,13 @@ jobs:
             ## sa https://stackoverflow.com/questions/73949730/eks-pod-in-workspace-getting-default-scheduler-for-fargate
             ## noch keine Ahnung, wie das geht - irgendwie https://docs.aws.amazon.com/eks/latest/userguide/fargate-profile.html#create-fargate-profile
             helm upgrade --install --namespace default kube-enforcer aqua-helm/kube-enforcer --version 2022.4 -f ./kube-enforcer-values.yaml
+
+    - name: Utilities
+      run: |
+          echo CloudFormation:
+          echo "https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks?filteringText=&filteringStatus=active&viewNested=true"
+          echo
+          echo "eksctl delete cluster --region ${{ env.AWS_REGION }} --name ${{ env.EKS_CLUSTER }}"
 
 
             
