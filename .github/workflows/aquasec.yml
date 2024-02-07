@@ -38,7 +38,14 @@ jobs:
             sudo mv /tmp/eksctl /usr/local/bin
             eksctl version
 
+    - name: Check if the cluster already exists  ##assuming the service also exists without checking
+      id: ClusterExists
+      run: echo "result=$(aws ecs list-clusters --region ${{ env.AWS_REGION }} --query "contains(clusterArns,'arn:aws:ecs:${{ env.AWS_REGION }}:633291361733:cluster/${{ env.EKS_CLUSTER }}')")" >> $GITHUB_OUTPUT          
+   
+     
+### Wenn Cluster noch nicht existiert 
     - name: create an EKS cluster on Fargate using the eksctl
+      if: steps.ClusterExists.outputs.result == 'false'
       run:  |
             eksctl create cluster \
             --name ${{ env.EKS_CLUSTER }} \
@@ -48,6 +55,7 @@ jobs:
             # --region ${{ env.AWS_REGION }}  ###/home/runner/work/_temp/05673ba0-5ba0-4f35-befd-e022bfe6a367.sh: line 4: --region: command not found ???
 
     - name: kubectl
+      if: steps.ClusterExists.outputs.result == 'true'
       run:  |
             aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.EKS_CLUSTER }}
             kubectl version --client=true -o json | jq '.clientVersion.gitVersion' -r 
@@ -55,6 +63,7 @@ jobs:
             kubectl get pods -A -o wide
             
     - name: helm
+      if: steps.ClusterExists.outputs.result == 'true'
       run:  |
             helm repo add aqua-helm https://helm.aquasec.com
             helm repo update
