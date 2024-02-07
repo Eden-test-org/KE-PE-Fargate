@@ -62,7 +62,12 @@ jobs:
             kubectl get nodes -o wide
             kubectl get pods -A -o wide
 
-### In Fargate the fargate-profile needs to be created first. Once this is created, the namespace can be created, and everything works.
+    - name: deploy some workload   
+      if: steps.ClusterExists.outputs.result == 'false' && steps.ClusterExists2.outputs.result == 'true'
+      run:  |
+            kubectl create deployment netshoot --image=nicolaka/netshoot -- "/bin/sleep" "infinity"
+
+### In Fargate the fargate-profile needs to be created first. Once this is created, the namespace can be created
     - name: create namespace for Aqua with fargate profile   
       if: steps.ClusterExists.outputs.result == 'false' && steps.ClusterExists2.outputs.result == 'true'
       run:  |
@@ -82,11 +87,6 @@ jobs:
             helm search repo aqua-helm
             helm upgrade --install --namespace ${{ env.NAMESPACE }} kube-enforcer aqua-helm/kube-enforcer --version 2022.4 -f ./kube-enforcer-values.yaml --set global.imageCredentials.username='${{ secrets.AQUA_USER }}',global.imageCredentials.password='${{ secrets.AQUA_PASSWORD }}'
             
-    - name: deploy some workload   
-      if: steps.ClusterExists2.outputs.result == 'true'
-      run:  |
-            kubectl create deployment netshoot --image=nicolaka/netshoot -- "/bin/sleep" "infinity"
-
     - name: Utilities
       run: |
           echo CloudFormation:
