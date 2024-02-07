@@ -5,8 +5,9 @@ on:
     branches: [ "main" ]
 
 env:
-  AWS_REGION: us-west-1                   
-  EKS_CLUSTER: AndreasMCluster2
+  AWS_REGION:   us-west-1                   
+  EKS_CLUSTER:  AndreasMCluster2
+  NAMESPACE:    aqua
   # ECR_REPOSITORY: andreasm                
   # ECS_SERVICE: MESidecar                  
   # ECS_TASK_DEFINITION: AndreasM-ME-Sidecar
@@ -41,10 +42,9 @@ jobs:
     - name: Check if the cluster already exists  ##assuming the service also exists without checking
       id: ClusterExists
       run: echo "result=$(aws ecs list-clusters --region ${{ env.AWS_REGION }} --query "contains(clusterArns,'arn:aws:ecs:${{ env.AWS_REGION }}:633291361733:cluster/${{ env.EKS_CLUSTER }}')")" >> $GITHUB_OUTPUT          
-   
      
 ### Wenn Cluster noch nicht existiert 
-    - name: create an EKS cluster on Fargate using the eksctl
+    - name: create an EKS cluster with Fargate profile
       if: steps.ClusterExists.outputs.result == 'false'
       run:  |
             eksctl create cluster \
@@ -52,15 +52,24 @@ jobs:
             --region ${{ env.AWS_REGION }} \
             --fargate --version 1.27
 
-            # --region ${{ env.AWS_REGION }}  ###/home/runner/work/_temp/05673ba0-5ba0-4f35-befd-e022bfe6a367.sh: line 4: --region: command not found ???
-
-    - name: kubectl
+    - name: configure kubectl
       if: steps.ClusterExists.outputs.result == 'true'
       run:  |
             aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.EKS_CLUSTER }}
             kubectl version --client=true -o json | jq '.clientVersion.gitVersion' -r 
             kubectl get nodes -o wide
             kubectl get pods -A -o wide
+
+    - name: create namespace for Aqua with fargateprofile   
+      if: steps.ClusterExists.outputs.result == 'true'
+      run:  |
+            kubectl create ns ${{ env.NAMESPACE }}
+
+            eksctl create fargateprofile \
+                --cluster ${{ env.EKS_CLUSTER }} \
+                --name aqua-fargate-profile \
+                --namespace ${{ env.NAMESPACE }} \
+                --labels key=value
             
     - name: helm
       if: steps.ClusterExists.outputs.result == 'true'
@@ -68,11 +77,16 @@ jobs:
             helm repo add aqua-helm https://helm.aquasec.com
             helm repo update
             helm search repo aqua-helm
-            ## helm upgrade --install --namespace aqua kube-enforcer aqua-helm/kube-enforcer --version 2022.4 -f ./kube-enforcer-values.yaml --create-namespace
+            helm upgrade --install --namespace ${{ env.NAMESPACE }} kube-enforcer aqua-helm/kube-enforcer --version 2022.4 -f ./kube-enforcer-values.yaml
             ## In Fargate the fargate-profile needs to be created first. Once this is created, the namespace can be created, and everything works.
             ## sa https://stackoverflow.com/questions/73949730/eks-pod-in-workspace-getting-default-scheduler-for-fargate
             ## noch keine Ahnung, wie das geht - irgendwie https://docs.aws.amazon.com/eks/latest/userguide/fargate-profile.html#create-fargate-profile
-            helm upgrade --install --namespace default kube-enforcer aqua-helm/kube-enforcer --version 2022.4 -f ./kube-enforcer-values.yaml
+            ## helm upgrade --install --namespace default kube-enforcer aqua-helm/kube-enforcer --version 2022.4 -f ./kube-enforcer-values.yaml
+
+    - name: deploy some workload   
+      if: steps.ClusterExists.outputs.result == 'true'
+      run:  |
+            kubectl create deployment netshoot --image=nicolaka/netshoot -- "/bin/sleep" "infinity"
 
     - name: Utilities
       run: |
@@ -80,11 +94,6 @@ jobs:
           echo "https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks?filteringText=&filteringStatus=active&viewNested=true"
           echo
           echo "eksctl delete cluster --region ${{ env.AWS_REGION }} --name ${{ env.EKS_CLUSTER }}"
-
-
-            
-# ## eksctl delete cluster --name AndreasMCluster us-west-1
-
 
 
 # ## für aws cli output in bash (sa https://docs.aws.amazon.com/cli/latest/userguide/cli-usage-pagination.html#cli-usage-pagination-clientside)
