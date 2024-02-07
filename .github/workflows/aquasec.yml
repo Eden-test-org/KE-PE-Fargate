@@ -64,7 +64,6 @@ jobs:
       if: steps.ClusterExists.outputs.result == 'true'
       run:  |
             kubectl create ns ${{ env.NAMESPACE }}
-
             eksctl create fargateprofile \
                 --cluster ${{ env.EKS_CLUSTER }} \
                 --name aqua-fargate-profile \
@@ -77,11 +76,11 @@ jobs:
             helm repo add aqua-helm https://helm.aquasec.com
             helm repo update
             helm search repo aqua-helm
-            helm upgrade --install --namespace ${{ env.NAMESPACE }} kube-enforcer aqua-helm/kube-enforcer --version 2022.4 -f ./kube-enforcer-values.yaml
+            ## helm upgrade --install --namespace ${{ env.NAMESPACE }} kube-enforcer aqua-helm/kube-enforcer --version 2022.4 -f ./kube-enforcer-values.yaml
             ## In Fargate the fargate-profile needs to be created first. Once this is created, the namespace can be created, and everything works.
             ## sa https://stackoverflow.com/questions/73949730/eks-pod-in-workspace-getting-default-scheduler-for-fargate
             ## noch keine Ahnung, wie das geht - irgendwie https://docs.aws.amazon.com/eks/latest/userguide/fargate-profile.html#create-fargate-profile
-            ## helm upgrade --install --namespace default kube-enforcer aqua-helm/kube-enforcer --version 2022.4 -f ./kube-enforcer-values.yaml
+            helm upgrade --install --namespace default kube-enforcer aqua-helm/kube-enforcer --version 2022.4 -f ./kube-enforcer-values.yaml
 
     - name: deploy some workload   
       if: steps.ClusterExists.outputs.result == 'true'
