@@ -80,7 +80,7 @@ jobs:
             helm repo add aqua-helm https://helm.aquasec.com
             helm repo update
             helm search repo aqua-helm
-            helm upgrade --install --namespace ${{ env.NAMESPACE }} kube-enforcer aqua-helm/kube-enforcer --version 2022.4 -f ./kube-enforcer-values.yaml --set imageCredentials.username=${{ secrets.AQUA_USER }},imageCredentials.password=${{ secrets.AQUA_PASSWORD }}
+            helm upgrade --install --namespace ${{ env.NAMESPACE }} kube-enforcer aqua-helm/kube-enforcer --version 2022.4 -f ./kube-enforcer-values.yaml --set imageCredentials.username='${{ secrets.AQUA_USER }}',imageCredentials.password='${{ secrets.AQUA_PASSWORD }}'
             
     - name: deploy some workload   
       if: steps.ClusterExists2.outputs.result == 'true'
