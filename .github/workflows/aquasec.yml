@@ -32,18 +32,18 @@ jobs:
         aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
         aws-region: ${{ env.AWS_REGION }}
 
-    # - name: installing eksctl
-      # run:  |
-            # curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
-            # sudo mv /tmp/eksctl /usr/local/bin
-            # eksctl version
+    - name: installing eksctl
+      run:  |
+            curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+            sudo mv /tmp/eksctl /usr/local/bin
+            eksctl version
 
-    # - name: create an EKS cluster on Fargate using the eksctl
-      # run:  |
-            # eksctl create cluster \
-            # --version 1.27 --fargate \
-            # --name ${{ env.EKS_CLUSTER }} \ 
-            # --region ${{ env.AWS_REGION }}  ###/home/runner/work/_temp/05673ba0-5ba0-4f35-befd-e022bfe6a367.sh: line 4: --region: command not found ???
+    - name: create an EKS cluster on Fargate using the eksctl
+      run:  |
+            eksctl create cluster \
+            --version 1.27 --fargate \
+            --name ${{ env.EKS_CLUSTER }} \ 
+            --region ${{ env.AWS_REGION }}  ###/home/runner/work/_temp/05673ba0-5ba0-4f35-befd-e022bfe6a367.sh: line 4: --region: command not found ???
 
     - name: kubectl
       run:  |
