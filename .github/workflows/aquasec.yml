@@ -38,7 +38,7 @@ jobs:
 
     - name: Check if the cluster already exists
       id: ClusterExists
-      run: echo "result=$(aws ecs list-clusters --region ${{ env.AWS_REGION }} --query "contains(clusterArns,'arn:aws:ecs:${{ env.AWS_REGION }}:633291361733:cluster/${{ env.EKS_CLUSTER }}')")" >> $GITHUB_OUTPUT          
+      run: echo "result=$(aws eks list-clusters --region ${{ env.AWS_REGION }} --query "contains(clusters,'${{ env.EKS_CLUSTER }}')")" >> $GITHUB_OUTPUT          
      
 ### Wenn Cluster noch nicht existiert 
 ### sa https://docs.aws.amazon.com/eks/latest/userguide/fargate.html
@@ -52,7 +52,7 @@ jobs:
 
     - name: Check if the cluster exists
       id: ClusterExists2
-      run: echo "result=$(aws ecs list-clusters --region ${{ env.AWS_REGION }} --query "contains(clusterArns,'arn:aws:ecs:${{ env.AWS_REGION }}:633291361733:cluster/${{ env.EKS_CLUSTER }}')")" >> $GITHUB_OUTPUT          
+      run: echo "result=$(aws eks list-clusters --region ${{ env.AWS_REGION }} --query "contains(clusters,'${{ env.EKS_CLUSTER }}')")" >> $GITHUB_OUTPUT          
      
     - name: configure kubectl
       if: steps.ClusterExists2.outputs.result == 'true'
