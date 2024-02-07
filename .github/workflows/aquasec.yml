@@ -36,11 +36,12 @@ jobs:
             sudo mv /tmp/eksctl /usr/local/bin
             eksctl version
 
-    - name: Check if the cluster already exists  ##assuming the service also exists without checking
+    - name: Check if the cluster already exists
       id: ClusterExists
       run: echo "result=$(aws ecs list-clusters --region ${{ env.AWS_REGION }} --query "contains(clusterArns,'arn:aws:ecs:${{ env.AWS_REGION }}:633291361733:cluster/${{ env.EKS_CLUSTER }}')")" >> $GITHUB_OUTPUT          
      
 ### Wenn Cluster noch nicht existiert 
+### sa https://docs.aws.amazon.com/eks/latest/userguide/fargate.html
     - name: create an EKS cluster with Fargate profile
       if: steps.ClusterExists.outputs.result == 'false'
       run:  |
@@ -49,6 +50,10 @@ jobs:
             --region ${{ env.AWS_REGION }} \
             --fargate --version 1.27
 
+    - name: Check if the cluster exists
+      id: ClusterExists
+      run: echo "result=$(aws ecs list-clusters --region ${{ env.AWS_REGION }} --query "contains(clusterArns,'arn:aws:ecs:${{ env.AWS_REGION }}:633291361733:cluster/${{ env.EKS_CLUSTER }}')")" >> $GITHUB_OUTPUT          
+     
     - name: configure kubectl
       if: steps.ClusterExists.outputs.result == 'true'
       run:  |
@@ -57,29 +62,28 @@ jobs:
             kubectl get nodes -o wide
             kubectl get pods -A -o wide
 
-    - name: create namespace for Aqua with fargateprofile   
+### In Fargate the fargate-profile needs to be created first. Once this is created, the namespace can be created, and everything works.
+    - name: create namespace for Aqua with fargate profile   
       if: steps.ClusterExists.outputs.result == 'true'
       run:  |
-            kubectl create ns ${{ env.NAMESPACE }}
-
             eksctl create fargateprofile \
                 --region ${{ env.AWS_REGION }} \
                 --cluster ${{ env.EKS_CLUSTER }} \
                 --name aqua-fargate-profile \
                 --namespace ${{ env.NAMESPACE }}
-            
-    - name: helm
+
+            kubectl create ns ${{ env.NAMESPACE }}
+
+    - name: deploy Aqua with helm
       if: steps.ClusterExists.outputs.result == 'true'
       run:  |
             helm repo add aqua-helm https://helm.aquasec.com
             helm repo update
             helm search repo aqua-helm
-            helm upgrade --install --namespace ${{ env.NAMESPACE }} kube-enforcer aqua-helm/kube-enforcer --version 2022.4 -f ./kube-enforcer-values.yaml
-            ## In Fargate the fargate-profile needs to be created first. Once this is created, the namespace can be created, and everything works.
-            ## sa https://stackoverflow.com/questions/73949730/eks-pod-in-workspace-getting-default-scheduler-for-fargate
-            ## noch keine Ahnung, wie das geht - irgendwie https://docs.aws.amazon.com/eks/latest/userguide/fargate-profile.html#create-fargate-profile
-            ## helm upgrade --install --namespace default kube-enforcer aqua-helm/kube-enforcer --version 2022.4 -f ./kube-enforcer-values.yaml
-
+            helm upgrade --install --namespace ${{ env.NAMESPACE }} kube-enforcer aqua-helm/kube-enforcer --version 2022.4 -f ./kube-enforcer-values.yaml --set \
+                imageCredentials.username=${{ env.AQUA_USER }},\
+                imageCredentials.password=${{ env.AQUA_PASSWORD }}
+            
     - name: deploy some workload   
       if: steps.ClusterExists.outputs.result == 'true'
       run:  |

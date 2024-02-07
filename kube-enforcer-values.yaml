@@ -36,8 +36,8 @@ global:
     name: "aqua-registry-secret"
     repositoryUriPrefix: "registry.aquasec.com" # for dockerhub - "docker.io"
     registry: "registry.aquasec.com" #REQUIRED only if create is true, for dockerhub - "index.docker.io/v1/"
-    username: "Andreas.Muller@aquasec.com"
-    password: "jufean!0521"
+    username: ""
+    password: ""
 
 # If serviceAccount.create=false and serviceAccount.name not defined then will be used serviceAccount aqua-kube-enforcer-sa
 # but in this case serviceAccount should be created manually before chart deploying
