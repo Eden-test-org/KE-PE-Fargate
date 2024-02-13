@@ -92,9 +92,9 @@ jobs:
           echo To delete the cluster use CloudFormation:
           echo "https://${{ env.AWS_REGION }}.console.aws.amazon.com/cloudformation/home?region=${{ env.AWS_REGION }}#/stacks?filteringText=&filteringStatus=active&viewNested=true"
           echo
-          echo First delete the Fargate profiles:
+          echo First manually delete the Fargate profiles:
           echo "https://${{ env.AWS_REGION }}.console.aws.amazon.com/eks/home?region=${{ env.AWS_REGION }}#/clusters/${{ env.EKS_CLUSTER }}/?selectedTab=cluster-compute-tab"
-          echo and the VPC endpoint associated with the Subnet / NIC
+          echo and the VPC endpoint associated with the Subnet / NIC and VPC
           echo
           echo Aqua Console:
           echo "https://c1fae5dbe2.cloud.aquasec.com -> https://eu-1.cloud.aquasec.com/ah/#/csp/enforcers"
