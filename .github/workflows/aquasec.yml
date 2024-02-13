@@ -79,7 +79,7 @@ jobs:
 
             kubectl create ns ${{ env.NAMESPACE }}
 
-    - name: deploy Aqua with helm
+    - name: deploy Aqua KE with helm
       if: steps.ClusterExists2.outputs.result == 'true'
       run:  |
             helm repo add aqua-helm https://helm.aquasec.com
