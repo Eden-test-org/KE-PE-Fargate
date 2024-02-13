@@ -89,8 +89,16 @@ jobs:
             
     - name: Utilities
       run: |
-          echo CloudFormation:
-          echo "https://us-west-1.console.aws.amazon.com/cloudformation/home?region=us-west-1#/stacks?filteringText=&filteringStatus=active&viewNested=true"
+          echo To delete the cluster use CloudFormation:
+          echo "https://${{ env.AWS_REGION }}.console.aws.amazon.com/cloudformation/home?region=${{ env.AWS_REGION }}#/stacks?filteringText=&filteringStatus=active&viewNested=true"
+          echo
+          echo "https://${{ env.AWS_REGION }}.console.aws.amazon.com/eks/home?region=${{ env.AWS_REGION }}#/clusters/${{ env.EKS_CLUSTER }}"
+          echo
+          echo Aqua Console:
+          echo "https://c1fae5dbe2.cloud.aquasec.com -> https://eu-1.cloud.aquasec.com/ah/#/csp/enforcers"
+          echo
+          echo Doku:
+          echo "https://docs.aquasec.com/saas/workload-protection/enforcers/pod-enforcer/"
           echo
           echo "aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.EKS_CLUSTER }}"
           echo
