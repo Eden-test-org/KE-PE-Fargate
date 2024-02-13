@@ -6,4 +6,4 @@ https://d-9067a32c00.awsapps.com/start#/<br>
 -> Command line or programmatic access<br> 
 <br> 
 put the values to this repository's action secrets<br> 
-https://github.com/mulan04/MeSidecar-Fargate/settings/secrets/actions
+https://github.com/mulan04/KE-PE-Fargate/settings/secrets/actions
