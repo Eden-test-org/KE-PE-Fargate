@@ -39,7 +39,7 @@ jobs:
     - name: Check if the cluster already exists
       id: ClusterExists
       run: echo "result=$(aws eks list-clusters --region ${{ env.AWS_REGION }} --query "contains(clusters,'${{ env.EKS_CLUSTER }}')")" >> $GITHUB_OUTPUT          
-     
+#     
 ### Wenn Cluster noch nicht existiert 
 ### sa https://docs.aws.amazon.com/eks/latest/userguide/fargate.html
     - name: create an EKS cluster with Fargate profile
