@@ -17,7 +17,8 @@ global:
   gateway:
     # change address to gateway endpoint. For Saas use the hostname containing `-gw` 
     # from your onboarding email and switch port to 443
-    address: c1fae5dbe2-gw.cloud.aquasec.com
+    # address: c1fae5dbe2-gw.cloud.aquasec.com
+    address: 812d85f5c9-gw.cloud.aquasec.com
     port: 443
   # Specifies the secret data for imagePullSecrets needed to fetch the private docker images
   imageCredentials:
@@ -83,7 +84,7 @@ microEnforcerImage:
 # Kubebench Image
 kubebenchImage:
   repository: "aquasec/kube-bench"  # Default aqua registry KubeBench repository name
-  tag: "v0.6.15"
+  tag: "v0.7.3"
 
 # Enable/Disable KB scanning on tainted nodes
 kubeBench:
@@ -94,7 +95,7 @@ fullnameOverride: "aqua-kube-enforcer"
 
 # Display a custom cluster name in the infrastructure tab of Aqua Enterprise
 # Follow https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#dns-label-names for naming conventions”
-clusterName: "AndreasMCluster"
+clusterName: "AndreasMClusterFargate"
 logicalName: ""
 logLevel: ""
 
@@ -145,7 +146,8 @@ aquaSecret:
   create: true
   name: "aqua-kube-enforcer-token"
   # Enter the enforcer token in "clear-text" format without quotes generated from the Console UI, if `aquaSecret.create: true`
-  kubeEnforcerToken: cd5c10c0-3012-44c1-9c32-ddf071585873
+  # kubeEnforcerToken: cd5c10c0-3012-44c1-9c32-ddf071585873
+  kubeEnforcerToken: 63ac7b17-7dd7-409b-aa35-a19d785e08c1
 
 clusterRole:
   name: "aqua-kube-enforcer"
@@ -300,7 +302,7 @@ starboard:
   image:
     repositoryUriPrefix: "docker.io/aquasec"
     repository: "starboard-operator"
-    tag: "0.15.18"
+    tag: "0.15.20"
     pullPolicy: Always
 
   container_securityContext:
@@ -362,7 +364,7 @@ trivy:
   image:
     registry: "docker.io/aquasec"
     repository: "trivy-operator"
-    tag: "0.16.1"
+    tag: "0.20.1"
     pullPolicy: IfNotPresent
     # Reference the secret for private registry
     secretName: ""
