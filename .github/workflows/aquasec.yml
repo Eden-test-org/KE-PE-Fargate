@@ -110,11 +110,11 @@ jobs:
           echo "für zusätzliche Workload:"
           echo "kubectl create ns andreasmtestfargate"
           echo
-          echo "eksctl create fargateprofile \"
-          echo "--region us-west-1 \"
-          echo "--cluster AndreasMCluster \"
-          echo "--name andreasmtestfargate-fargate-profile \"
-          echo "--namespace andreasmtestfargate"
+          echo 'eksctl create fargateprofile \'
+          echo '--region us-west-1 \'
+          echo '--cluster AndreasMCluster \'
+          echo '--name andreasmtestfargate-fargate-profile \'
+          echo '--namespace andreasmtestfargate'
           echo 	  
           echo "kubectl -n andreasmtestfargate create deployment fedora --image=fedora -- sleep infinity"
           echo
