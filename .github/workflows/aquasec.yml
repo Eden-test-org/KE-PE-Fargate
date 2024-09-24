@@ -105,10 +105,10 @@ jobs:
           echo CloudShell:
           echo "aws eks update-kubeconfig --region ${{ env.AWS_REGION }} --name ${{ env.EKS_CLUSTER }}"
           echo
-          echo "curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp && sudo mv /tmp/eksctl /usr/local/bin"
-          echo
           echo "für zusätzliche Workload:"
           echo "kubectl create ns andreasmtestfargate"
+          echo
+          echo "curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp && sudo mv /tmp/eksctl /usr/local/bin"
           echo
           echo 'eksctl create fargateprofile \'
           echo '--region us-west-1 \'
