@@ -6,7 +6,7 @@ on:
 
 env:
   AWS_REGION:   us-west-1                   
-  EKS_CLUSTER:  AndreasMCluster
+  EKS_CLUSTER:  EdenSCluster
   NAMESPACE:    aqua
 
 permissions:
